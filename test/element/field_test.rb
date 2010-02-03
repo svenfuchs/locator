@@ -44,8 +44,17 @@ class ElementFieldTest < Test::Unit::TestCase
     assert_locate '<input type="text" class="foo">', Field.new.xpath(:class => 'foo')
   end
 
-  test "finds a text input by label content" do
+  test "finds an input by label content" do
     html = '<label for="bar">foo</label><input type="text" id="bar">'
     assert_locate html, Field.new.xpath('foo'), '<input type="text" id="bar">'
+  end
+
+  test "finds an input by label content and input class" do
+    html = '<label for="bar">foo</label><input type="text" id="bar" class="baz">'
+    assert_locate html, Field.new.xpath('foo', :class => 'baz'), '<input type="text" id="bar" class="baz">'
+  end
+
+  test "does not find a checkbox input" do
+    assert_no_locate '<input type="checkbox">', Field.new.xpath
   end
 end

@@ -17,7 +17,7 @@ module Locator
       else
         values = Array(values).map { |value| xpath?(value) ? value : "\"#{value}\"" }
         expr = Array(names).map { |name| values.map { |value| "@#{name}=#{value}" } }
-        '[' + expr.flatten.join(' or ') + ']'
+        expr.empty? ? '' : '[' + expr.flatten.join(' or ') + ']'
       end
     end
     

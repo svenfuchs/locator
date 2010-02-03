@@ -2,6 +2,8 @@ module Locator
   module Dom
     module Nokogiri
       class Page
+        attr_reader :dom
+
         def initialize(html)
           @dom = ::Nokogiri::HTML::Document.parse(html)
         end

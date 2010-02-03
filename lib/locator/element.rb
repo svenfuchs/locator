@@ -17,7 +17,6 @@ module Locator
     def initialize(name = '*', locatables = [], attributes = {})
       super(name)
       @content = !!locatables.delete(:content)
-      @label   = !!locatables.delete(:label)
       @locatables = locatables
       @attributes = attributes
     end
@@ -33,10 +32,6 @@ module Locator
       def content?
         @content
       end
-    
-      def label?
-        @label
-      end
 
       def compose(selector, attributes)
         attributes = @attributes.merge(attributes)
@@ -44,7 +39,7 @@ module Locator
         terms = []
         terms << equals(locatables, selector) if selector
         terms << contains(selector) if content? && selector
-        and!(terms)
+        and!(terms) unless terms.empty?
       end
   end
 end

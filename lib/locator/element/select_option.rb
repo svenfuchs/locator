@@ -2,7 +2,7 @@ module Locator
   class Element
     class SelectOption < Element
       def initialize
-        super('option', [:id, :value])
+        super('option', [:id, :value, :content])
       end
     end
   end
