@@ -13,7 +13,7 @@ class LocatorTest < Test::Unit::TestCase
   
   test "locates an element from html" do
     html = '<html><body><h1></h1><form class="bar"></form></body></html>'
-    element = Locator.locate(html, :form, :class => 'bar')
+    element = Locator.new(html).locate(:form, :class => 'bar')
     assert_equal '<form class="bar"></form>', element.to_s
   end
 end

@@ -1,4 +1,4 @@
-module Locator
+class Locator
   class Element
     class ElementsList
       attr_reader :elements

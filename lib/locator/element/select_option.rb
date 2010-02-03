@@ -1,4 +1,4 @@
-module Locator
+class Locator
   class Element
     class SelectOption < Element
       def initialize

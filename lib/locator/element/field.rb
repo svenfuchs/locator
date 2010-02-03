@@ -1,4 +1,4 @@
-module Locator
+class Locator
   class Element
     class Field < ElementsList
       def initialize

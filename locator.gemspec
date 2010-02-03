@@ -12,8 +12,13 @@ Gem::Specification.new do |s|
   s.date = %q{2010-02-03}
   s.description = %q{Generic html element locators for integration testing}
   s.email = %q{svenfuchs@artweb-design.de}
+  s.extra_rdoc_files = [
+    "README.textile"
+  ]
   s.files = [
-    "Rakefile",
+    "README.textile",
+     "Rakefile",
+     "lib/core_ext/string/underscore.rb",
      "lib/locator.rb",
      "lib/locator/boolean.rb",
      "lib/locator/dom.rb",
@@ -37,7 +42,13 @@ Gem::Specification.new do |s|
      "test/all.rb",
      "test/element/button_test.rb",
      "test/element/field_test.rb",
+     "test/element/form_test.rb",
+     "test/element/label_test.rb",
      "test/element/link_test.rb",
+     "test/element/select_option_test.rb",
+     "test/element/select_test.rb",
+     "test/element/text_area_test.rb",
+     "test/element_test.rb",
      "test/locator_test.rb",
      "test/test_helper.rb",
      "test/xpath/boolean_test.rb",
@@ -52,7 +63,13 @@ Gem::Specification.new do |s|
     "test/all.rb",
      "test/element/button_test.rb",
      "test/element/field_test.rb",
+     "test/element/form_test.rb",
+     "test/element/label_test.rb",
      "test/element/link_test.rb",
+     "test/element/select_option_test.rb",
+     "test/element/select_test.rb",
+     "test/element/text_area_test.rb",
+     "test/element_test.rb",
      "test/locator_test.rb",
      "test/test_helper.rb",
      "test/xpath/boolean_test.rb",

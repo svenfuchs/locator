@@ -2,10 +2,8 @@ require File.expand_path('../test_helper', __FILE__)
 require 'locator/element'
 
 class ElementTest < Test::Unit::TestCase
-  include Locator
-  
   def xpath(*args)
-    Element.new('foo', [:id, :content]).xpath(*args)
+    Locator::Element.new('foo', [:id, :content]).xpath(*args)
   end
 
   test "no selector given => finds all element" do

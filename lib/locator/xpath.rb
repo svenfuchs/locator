@@ -1,4 +1,4 @@
-module Locator
+class Locator
   autoload :Boolean, 'locator/boolean'
   
   Boolean::Or.operator, Boolean::And.operator = ' | ', ''

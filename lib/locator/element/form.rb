@@ -1,4 +1,4 @@
-module Locator
+class Locator
   class Element
     class Form < Element
       def initialize

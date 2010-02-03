@@ -1,4 +1,4 @@
-module Locator
+class Locator
   class Element < Xpath
     autoload :Area,           'locator/element/area'
     autoload :Button,         'locator/element/button'

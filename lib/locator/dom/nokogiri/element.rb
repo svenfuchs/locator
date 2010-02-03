@@ -1,4 +1,4 @@
-module Locator
+class Locator
   module Dom
     module Nokogiri
       class Element

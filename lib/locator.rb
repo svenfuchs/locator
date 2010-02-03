@@ -1,6 +1,6 @@
 require 'core_ext/string/underscore'
 
-module Locator
+class Locator
   autoload :Dom,     'locator/dom'
   autoload :Element, 'locator/element'
   autoload :Xpath,   'locator/xpath'
@@ -14,12 +14,6 @@ module Locator
       Locator[type].new.xpath(*args)
     end
 
-    def locate(html, type, *args)
-      dom  = Locator::Dom.page(html)
-      path = Locator.xpath(type, *args)
-      dom.elements_by_xpath(path).first
-    end
-
     protected
 
       def locators
@@ -27,5 +21,32 @@ module Locator
           [name.underscore.to_sym, Element.const_get(name)]
         end.flatten]
       end
+
+      def scopes
+        @scopes ||= []
+      end
+
+      def current_scope
+        scopes.last
+      end
+
+      def within(*args)
+        element = args.first.respond_to?(:xpath) ? args.first : locate_element(*args)
+        scopes.push(element.xpath)
+        result = yield
+        scopes.pop
+        result
+      end
+  end
+  
+  attr_reader :dom
+  
+  def initialize(dom)
+    @dom = dom.respond_to?(:elements_by_xpath) ? dom : Dom.page(dom)
+  end
+  
+  def locate(type, *args)
+    path = Locator.xpath(type, *args)
+    dom.elements_by_xpath(path).first
   end
 end

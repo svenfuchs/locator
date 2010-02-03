@@ -7,10 +7,10 @@ require 'locator/xpath'
 # d = 'textarea'
 
 class XpathTest < Test::Unit::TestCase
-  include Locator
+  Xpath = Locator::Xpath
 
   def setup
-    Boolean::Or.operator, Boolean::And.operator = ' | ', ''
+    Locator::Boolean::Or.operator, Locator::Boolean::And.operator = ' | ', ''
   end
 
   test "simple xpath" do

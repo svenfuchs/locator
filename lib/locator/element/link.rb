@@ -1,4 +1,4 @@
-module Locator
+class Locator
   class Element
     class Link < Element
       def initialize
