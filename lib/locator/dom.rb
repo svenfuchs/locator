@@ -6,7 +6,11 @@ class Locator
     
     class << self
       def adapter
-        Nokogiri
+        @@adapter ||= Nokogiri
+      end
+
+      def adapter=(adapter)
+        @@adapter = adapter
       end
 
       def page(html)

@@ -9,23 +9,23 @@ class Locator
         end
         
         def xpath
-          @element.path.to_s
+          element.path.to_s
         end
         
         def css_path
-          @element.css_path.to_s
+          element.css_path.to_s
         end
 
         def inner_html
-          @element.inner_html
+          element.inner_html
         end
 
         def to_s
-          @element.to_s
+          element.to_s
         end
 
         def tag_name
-          @element.description.name
+          element.description.name
         end
 
         def ancestor_of?(other)
@@ -33,11 +33,15 @@ class Locator
         end
 
         def attribute(name)
-          @element.attribute(name).to_s
+          element.attribute(name).to_s
         end
 
         def attributes(names)
           names.map { |name| attribute(name) }
+        end
+        
+        def elements_by_xpath(xpath)
+          element.xpath(xpath).map { |element| Element.new(element) }
         end
       end
     end

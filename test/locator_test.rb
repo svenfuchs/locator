@@ -5,15 +5,27 @@ class LocatorTest < Test::Unit::TestCase
   test "looks up a locator/element class by type" do
     assert_equal Locator::Element::Field, Locator[:field]
   end
-  
+
   test "generates an xpath for type and given args" do
     path = Locator.xpath(:form, 'foo', :class => 'bar')
-    assert_equal '//form[@class="bar"][@id="foo" or @name="foo"]', path
+    assert_equal './/form[@class="bar"][@id="foo" or @name="foo"]', path
   end
-  
+
   test "locates an element from html" do
     html = '<html><body><h1></h1><form class="bar"></form></body></html>'
     element = Locator.new(html).locate(:form, :class => 'bar')
     assert_equal '<form class="bar"></form>', element.to_s
+  end
+
+  test "within scopes to an xpath" do
+    html = '<form id="foo"></form><div id="bar"><form></form></div>'
+    element = Locator.new(html).within(:xpath => '//div[@id="bar"]') { locate(:form) }
+    assert_equal '<form></form>', element.to_s
+  end
+
+  test "locates scopes to :within option" do
+    html = '<form id="foo"></form><div id="bar"><form></form></div>'
+    element = Locator.new(html).locate(:form, :within => '//div[@id="bar"]')
+    assert_equal '<form></form>', element.to_s
   end
 end
