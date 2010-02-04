@@ -1,5 +1,13 @@
 h1. Locator
 
-This library aims to extract common html element selection from testing tools such as "Webrat":http://github.com/brynary/webrat/blob/master/lib/webrat/core/locators.rb, "Capybara":http://github.com/jnicklas/capybara/blob/master/lib/capybara/xpath.rb or "Steam":http://github.com/svenfuchs/steam/blob/master/lib/steam/locators.rb.
+This library aims to extract common html element selection from testing tools such as "Webrat":http://github.com/brynary/webrat/blob/master/lib/webrat/core/locators.rb, "Capybara":http://github.com/jnicklas/capybara/blob/master/lib/capybara/xpath.rb or "Steam":http://github.com/svenfuchs/steam/blob/master/lib/steam/locators.rb. At its core it constructs "XPath":http://github.com/svenfuchs/locator/blob/master/lib/locator/xpath.rb objects using a simple "boolean expression engine":http://github.com/svenfuchs/locator/blob/master/lib/locator/boolean.rb in order to locate elements in a Nokogiri DOM. It provides a bunch of "Element classes":http://github.com/svenfuchs/locator/blob/master/lib/locator/element.rb that are targeted at implementing a Webrat-style DSL for convenience.
 
-At its core it constructs "XPath":http://github.com/svenfuchs/locator/blob/master/lib/locator/xpath.rb objects using a simple "boolean expression engine":http://github.com/svenfuchs/locator/blob/master/lib/locator/boolean.rb in order to locate elements in a Nokogiri DOM. It provides a bunch of "Element classes":http://github.com/svenfuchs/locator/blob/master/lib/locator/element.rb that are targeted at implementing a Webrat-style DSL for convenience.
+h2. Usage
+
+Of course you can use the underlying implementation, too, but there are three main public methods which are supposed to give you access to all you need.
+
+h3. Building an XPath
+
+h3. Locating an element
+
+h3. Scoping to an element

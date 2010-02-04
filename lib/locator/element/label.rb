@@ -1,8 +1,8 @@
-class Locator
+module Locator
   class Element
     class Label < Element
       def initialize
-        super('label', [:id, :content])
+        super('label', :equals => [:id, :content])
       end
     end
   end

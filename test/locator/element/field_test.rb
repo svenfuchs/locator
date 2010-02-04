@@ -5,56 +5,67 @@ class ElementFieldTest < Test::Unit::TestCase
   Field = Locator::Element::Field
 
   test "finds a textarea" do
-    assert_locate '<textarea></textarea>', Field.new.xpath
+    html = '<textarea></textarea>'
+    assert_equal 'textarea', Field.new.locate(html).tag_name
   end
   
   test "finds a text input" do
-    assert_locate '<input type="text">', Field.new.xpath
+    html = '<input type="text">'
+    assert_equal 'input', Field.new.locate(html).tag_name
   end
   
   test "finds a password input" do
-    assert_locate '<input type="password">', Field.new.xpath
+    html = '<input type="password">'
+    assert_equal 'input', Field.new.locate(html).tag_name
   end
   
   test "finds an email input" do
-    assert_locate '<input type="email">', Field.new.xpath
+    html = '<input type="email">'
+    assert_equal 'input', Field.new.locate(html).tag_name
   end
   
   test "finds a url input" do
-    assert_locate '<input type="url">', Field.new.xpath
+    html = '<input type="url">'
+    assert_equal 'input', Field.new.locate(html).tag_name
   end
   
   test "finds a search input" do
-    assert_locate '<input type="search">', Field.new.xpath
+    html = '<input type="search">'
+    assert_equal 'input', Field.new.locate(html).tag_name
   end
   
   test "finds a tel input" do
-    assert_locate '<input type="tel">', Field.new.xpath
+    html = '<input type="tel">'
+    assert_equal 'input', Field.new.locate(html).tag_name
   end
   
   test "finds a color input" do
-    assert_locate '<input type="color">', Field.new.xpath
+    html = '<input type="color">'
+    assert_equal 'input', Field.new.locate(html).tag_name
   end
 
   test "finds a text input by name" do
-    assert_locate '<input type="text" name="foo">', Field.new.xpath('foo')
+    html = '<input type="text" name="foo">'
+    assert_equal 'input', Field.new.locate(html, 'foo').tag_name
   end
 
   test "finds a text input by class attribute" do
-    assert_locate '<input type="text" class="foo">', Field.new.xpath(:class => 'foo')
+    html = '<input type="text" class="foo">'
+    assert_equal 'input', Field.new.locate(html, :class => 'foo').tag_name
   end
 
   test "finds an input by label content" do
     html = '<label for="bar">foo</label><input type="text" id="bar">'
-    assert_locate html, Field.new.xpath('foo'), '<input type="text" id="bar">'
+    assert_equal 'input', Field.new.locate(html, 'foo').tag_name
   end
 
   test "finds an input by label content and input class" do
     html = '<label for="bar">foo</label><input type="text" id="bar" class="baz">'
-    assert_locate html, Field.new.xpath('foo', :class => 'baz'), '<input type="text" id="bar" class="baz">'
+    assert_equal 'input', Field.new.locate(html, 'foo', :class => 'baz').tag_name
   end
 
   test "does not find a checkbox input" do
-    assert_no_locate '<input type="checkbox">', Field.new.xpath
+    html = '<input type="checkbox">'
+    assert_nil Field.new.locate(html)
   end
 end

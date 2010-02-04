@@ -27,11 +27,6 @@ class XpathTest < Test::Unit::TestCase
     path = Xpath.new(['input', 'button']).to_s
     assert_equal ".//input | .//button", path
   end
-
-  test "xpath or xpath" do
-    path = Xpath.new('input', :type => 'text').or!(Xpath.new('textarea')).to_s
-    assert_equal %(.//input[@type="text"] | .//textarea), path
-  end
   
   test "attribute equals to one of multiple values" do
     path = Xpath.new('input', :type => [:text, :password]).to_s

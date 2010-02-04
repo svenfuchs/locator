@@ -1,8 +1,8 @@
-class Locator
+module Locator
   class Element
-    class TextArea < LabeledElement
+    class TextArea < FormElement
       def initialize
-        super('textarea', [:id, :name])
+        super('textarea', :equals => [:id, :name])
       end
     end
   end

@@ -1,31 +1,81 @@
 require File.expand_path('../test_helper', __FILE__)
-require 'locator/element'
 
 class LocatorTest < Test::Unit::TestCase
+  include Locator
+
+  test "returns the element if given an element" do
+    html = '<p></p>'
+    element = Locator.locate(html, :p)
+    assert_equal element, Locator.locate(html, element)
+  end
+
   test "looks up a locator/element class by type" do
     assert_equal Locator::Element::Field, Locator[:field]
   end
 
   test "generates an xpath for type and given args" do
-    path = Locator.xpath(:form, 'foo', :class => 'bar')
-    assert_equal './/form[@class="bar"][@id="foo" or @name="foo"]', path
+    xpath = Locator.xpath(:form, :id => 'bar')
+    assert_equal './/form[@id="bar"]', xpath
   end
 
   test "locates an element from html" do
-    html = '<html><body><h1></h1><form class="bar"></form></body></html>'
-    element = Locator.new(html).locate(:form, :class => 'bar')
-    assert_equal '<form class="bar"></form>', element.to_s
+    html = '<html><body><p></p><form class="bar"></form></body></html>'
+    element = Locator.locate(html, :form)
+    assert_equal 'form', element.tag_name
+  end
+
+  # within
+
+  test "within scopes to a locator" do
+    html = '<form></form><div id="bar"><form id="foo"></form></div>'
+    element = Locator.within(:div, :id => 'bar') { |scope| scope.locate(html, :form) }
+    assert_equal 'foo', element.attribute('id')
+  end
+
+  test "within scopes to a css selector" do
+    html = '<form></form><div id="bar"><form id="foo"></form></div>'
+    element = Locator.within('#bar') { |scope| scope.locate(html, :form) }
+    assert_equal 'foo', element.attribute('id')
   end
 
   test "within scopes to an xpath" do
-    html = '<form id="foo"></form><div id="bar"><form></form></div>'
-    element = Locator.new(html).within(:xpath => '//div[@id="bar"]') { locate(:form) }
-    assert_equal '<form></form>', element.to_s
+    html = '<form></form><div id="bar"><form id="foo"></form></div>'
+    element = Locator.within('//div[@id="bar"]') { |scope| scope.locate(html, :form) }
+    assert_equal 'foo', element.attribute('id')
   end
 
-  test "locates scopes to :within option" do
-    html = '<form id="foo"></form><div id="bar"><form></form></div>'
-    element = Locator.new(html).locate(:form, :within => '//div[@id="bar"]')
-    assert_equal '<form></form>', element.to_s
+  test "nested within blocks" do
+    html = '<form></form><div><form><p id="foo"><p></form></div>'
+    element = Locator.within(:div) { |scope| scope.within(:form) { |scope| scope.locate(html, :p) } }
+    assert_equal 'foo', element.attribute('id')
+  end
+
+  test "locates scopes to :within option (css selector)" do
+    html = '<form></form><div><form id="foo"></form></div>'
+    element = Locator.locate(html, :form, :within => 'div')
+    assert_equal 'foo', element.attribute('id')
+  end
+
+  test "locates scopes to :within option (xpath)" do
+    html = '<form></form><div><form id="foo"></form></div>'
+    element = Locator.locate(html, :form, :within => '//div')
+    assert_equal 'foo', element.attribute('id')
+  end
+
+  test "within/locate with module included" do
+    html = '<form></form><div><form id="foo"></form></div>'
+    element = within(:div) { locate(html, :form) }
+    assert_equal 'foo', element.attribute('id')
+  end
+
+  test "locate when given a block scopes the block to the located element" do
+    html = '<form></form><div><form><p id="foo"><p></form></div>'
+    element = locate(html, :div) { locate(html, :form)  { locate(html, :p) } }
+    assert_equal 'foo', element.attribute('id')
+  end
+
+  test "locate does not yield the block when no element was found (would otherwise locate in global scope)" do
+    html = '<form></form><div><form><p id="foo"><p></form></div>'
+    assert_nil locate(html, :div) { locate(html, :form, :class => 'bar')  { locate(html, :p) } }
   end
 end

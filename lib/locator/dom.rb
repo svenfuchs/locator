@@ -1,6 +1,6 @@
 require 'nokogiri'
 
-class Locator
+module Locator
   module Dom
     autoload :Nokogiri, 'locator/dom/nokogiri'
     

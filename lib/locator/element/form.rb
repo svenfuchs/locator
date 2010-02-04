@@ -1,8 +1,8 @@
-class Locator
+module Locator
   class Element
     class Form < Element
       def initialize
-        super('form', [:id, :name])
+        super('form', :equals => [:id, :name])
       end
     end
   end

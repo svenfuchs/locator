@@ -1,34 +1,36 @@
 require File.expand_path('../../../test_helper', __FILE__)
-require 'locator/element'
 
-class ElementLinkTest < Test::Unit::TestCase
+class LocatorElementLinkTest < Test::Unit::TestCase
   Link = Locator::Element::Link
 
   test "finds a link" do
-    assert_locate '<a href=""></a>', Link.new.xpath
+    html = '<a class="foo"></a><a href="" class="bar"></a>'
+    assert_equal 'bar', Link.new.locate(html).attribute('class')
   end
 
   test "finds a link by id" do
-    assert_locate '<a href="" id="foo"></a>', Link.new.xpath('foo')
+    html = '<a href="" id="foo"></a><a href="" id="bar"></a>'
+    assert_equal 'bar', Link.new.locate(html, :id => 'bar').attribute('id')
   end
 
   test "finds a link by class" do
-    assert_locate '<a href="" class="foo"></a>', Link.new.xpath(:class => 'foo')
+    html = '<a href="" class="foo"></a><a href="" class="bar"></a>'
+    assert_equal 'bar', Link.new.locate(html, :class => 'bar').attribute('class')
   end
 
-  test "finds an link by content" do
-    assert_locate '<a href="">foo</a>', Link.new.xpath('foo')
+  test "finds a link by content" do
+    html = '<a href="">foo</a><a href="">bar</a>'
+    assert_equal 'bar', Link.new.locate(html, 'bar').content
   end
 
   test "does not find an anchor" do
-    assert_no_locate '<a name=""></a>', Link.new.xpath
+    html = 
+    assert_nil Link.new.locate('<a name="">foo</a>')
   end
 
-  test "does not find a link when id does not match" do
-    assert_no_locate '<a href="" id="bar"></a>', Link.new.xpath(:class => 'foo')
-  end
-
-  test "does not find a link when class does not match" do
-    assert_no_locate '<a href="" class="bar"></a>', Link.new.xpath(:class => 'foo')
+  test "finds a link with a href starting with a slash" do
+    html = '<a href="/foo/bar" class="foo"></a><a href="" class="bar"></a>'
+    assert_equal '/foo/bar', Link.new.locate(html, :href => '/foo/bar').attribute('href')
   end
 end
+

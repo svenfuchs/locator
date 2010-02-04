@@ -1,8 +1,8 @@
-class Locator
+module Locator
   class Element
-    class Select < LabeledElement
+    class Select < FormElement
       def initialize
-        super('select', [:id, :name])
+        super('select', :equals => [:id, :name])
       end
     end
   end

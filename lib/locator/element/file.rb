@@ -1,8 +1,8 @@
 module Locator
   class Element
-    class Link < Element
+    class File < Input
       def initialize
-        super('a', nil, :href => true)
+        super('input', :type => :file)
       end
     end
   end

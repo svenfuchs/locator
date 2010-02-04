@@ -1,19 +1,28 @@
-class Locator
+module Locator
   module Dom
     module Nokogiri
       class Element
-        attr_reader :element
+        attr_reader :element, :matches
 
         def initialize(element)
           @element = element
+          @matches = []
         end
-        
+
+        def <=>(other)
+          to_s.length <=> other.to_s.length
+        end
+
         def xpath
           element.path.to_s
         end
-        
+
         def css_path
           element.css_path.to_s
+        end
+        
+        def content
+          element.content
         end
 
         def inner_html
@@ -39,7 +48,7 @@ class Locator
         def attributes(names)
           names.map { |name| attribute(name) }
         end
-        
+
         def elements_by_xpath(xpath)
           element.xpath(xpath).map { |element| Element.new(element) }
         end

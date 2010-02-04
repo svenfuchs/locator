@@ -1,4 +1,4 @@
-class Locator
+module Locator
   module Dom
     module Nokogiri
       class Page
@@ -12,8 +12,12 @@ class Locator
           elements_by_xpath("//*[@id='#{id}']").first
         end
 
-        def elements_by_xpath(xpath)
-          @dom.xpath(xpath).map { |element| Element.new(element) }
+        def elements_by_css(*rules)
+          @dom.css(*rules).map { |element| Element.new(element) }
+        end
+
+        def elements_by_xpath(*xpaths)
+          @dom.xpath(*xpaths).map { |element| Element.new(element) }
         end
 
         def to_s

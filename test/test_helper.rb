@@ -29,18 +29,4 @@ end
 
 class Test::Unit::TestCase
   include TestMethod
-
-  def dom(html)
-    Locator::Dom.page(html)
-  end
-  
-  def assert_locate(html, path, elements = nil)
-    expected = Array(elements || html)
-    result   = dom(html).elements_by_xpath(path).map(&:to_s)
-    assert_equal expected, result
-  end
-  
-  def assert_no_locate(html, path)
-    assert_locate(html, path, [])
-  end
 end

@@ -5,22 +5,27 @@ class ElementTextAreaTest < Test::Unit::TestCase
   TextArea = Locator::Element::TextArea
 
   test "finds a textarea" do
-    assert_locate '<textarea></textarea>', TextArea.new.xpath
+    html = '<textarea></textarea>'
+    assert_equal 'textarea', TextArea.new.locate(html).tag_name
   end
 
   test "finds a textarea by id" do
-    assert_locate '<textarea id="foo"></textarea>', TextArea.new.xpath('foo')
+    html = '<textarea id="foo"></textarea>'
+    assert_equal 'textarea', TextArea.new.locate(html, 'foo').tag_name
   end
 
   test "finds a textarea by class" do
-    assert_locate '<textarea class="foo"></textarea>', TextArea.new.xpath(:class => 'foo')
+    html = '<textarea class="foo"></textarea>'
+    assert_equal 'textarea', TextArea.new.locate(html, :class => 'foo').tag_name
   end
 
   test "does not find a textarea when id does not match" do
-    assert_no_locate '<textarea id="bar"></textarea>', TextArea.new.xpath(:class => 'foo')
+    html = '<textarea id="bar"></textarea>'
+    assert_nil TextArea.new.locate(html, :class => 'foo')
   end
 
   test "does not find a textarea when class does not match" do
-    assert_no_locate '<textarea class="bar"></textarea>', TextArea.new.xpath(:class => 'foo')
+    html = '<textarea class="bar"></textarea>'
+    assert_nil TextArea.new.locate(html, :class => 'foo')
   end
 end

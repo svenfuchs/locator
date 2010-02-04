@@ -1,26 +1,30 @@
 require File.expand_path('../../../test_helper', __FILE__)
-require 'locator/element'
 
 class ElementSelectTest < Test::Unit::TestCase
   Select = Locator::Element::Select
 
   test "finds a select" do
-    assert_locate '<select></select>', Select.new.xpath
+    html = '<select id="foo" class="foo"></select><select id="bar" class="bar"></select>'
+    assert_equal 'select', Select.new.locate(html).tag_name
   end
 
   test "finds a select by id" do
-    assert_locate '<select id="foo"></select>', Select.new.xpath('foo')
+    html = '<select id="foo"></select>'
+    assert_equal 'select', Select.new.locate(html, 'foo').tag_name
   end
 
   test "finds a select by class" do
-    assert_locate '<select class="foo"></select>', Select.new.xpath(:class => 'foo')
+    html = '<select class="foo"></select>'
+    assert_equal 'select', Select.new.locate(html, :class => 'foo').tag_name
   end
 
   test "does not find a select when id does not match" do
-    assert_no_locate '<select id="bar"></select>', Select.new.xpath(:class => 'foo')
+    html = '<select id="bar"></select>'
+    assert_nil Select.new.locate(html, :class => 'foo')
   end
 
   test "does not find a select when class does not match" do
-    assert_no_locate '<select class="bar"></select>', Select.new.xpath(:class => 'foo')
+    html = '<select class="bar"></select>'
+    assert_nil Select.new.locate(html, :class => 'foo')
   end
 end

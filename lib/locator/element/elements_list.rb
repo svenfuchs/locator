@@ -1,14 +1,14 @@
-class Locator
+module Locator
   class Element
-    class ElementsList
+    class ElementsList < Element
       attr_reader :elements
-      
+
       def initialize(*elements)
         @elements = elements
       end
-      
-      def xpath(*args)
-        elements.map { |element| element.xpath(*args) }.join(' | ')
+
+      def lookup(dom, selector, attributes)
+        Result.new(elements.map { |element| element.send(:lookup, dom, selector, attributes) }.flatten)
       end
     end
   end

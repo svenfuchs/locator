@@ -5,19 +5,21 @@
 
 Gem::Specification.new do |s|
   s.name = %q{locator}
-  s.version = "0.0.1"
+  s.version = "0.0.2"
 
   s.required_rubygems_version = Gem::Requirement.new(">= 0") if s.respond_to? :required_rubygems_version=
   s.authors = ["Sven Fuchs"]
-  s.date = %q{2010-02-03}
+  s.date = %q{2010-02-09}
   s.description = %q{Generic html element locators for integration testing}
   s.email = %q{svenfuchs@artweb-design.de}
   s.extra_rdoc_files = [
-    "README.textile"
+    "README.textile",
+     "TODO"
   ]
   s.files = [
     "README.textile",
      "Rakefile",
+     "TODO",
      "lib/core_ext/string/underscore.rb",
      "lib/locator.rb",
      "lib/locator/boolean.rb",
@@ -28,31 +30,38 @@ Gem::Specification.new do |s|
      "lib/locator/element.rb",
      "lib/locator/element/area.rb",
      "lib/locator/element/button.rb",
+     "lib/locator/element/check_box.rb",
      "lib/locator/element/elements_list.rb",
      "lib/locator/element/field.rb",
+     "lib/locator/element/file.rb",
      "lib/locator/element/form.rb",
+     "lib/locator/element/form_element.rb",
+     "lib/locator/element/hidden_field.rb",
+     "lib/locator/element/input.rb",
      "lib/locator/element/label.rb",
      "lib/locator/element/labeled_element.rb",
      "lib/locator/element/link.rb",
+     "lib/locator/element/radio_button.rb",
      "lib/locator/element/select.rb",
      "lib/locator/element/select_option.rb",
      "lib/locator/element/text_area.rb",
+     "lib/locator/result.rb",
      "lib/locator/version.rb",
      "lib/locator/xpath.rb",
      "test/all.rb",
-     "test/element/button_test.rb",
-     "test/element/field_test.rb",
-     "test/element/form_test.rb",
-     "test/element/label_test.rb",
-     "test/element/link_test.rb",
-     "test/element/select_option_test.rb",
-     "test/element/select_test.rb",
-     "test/element/text_area_test.rb",
-     "test/element_test.rb",
+     "test/locator/boolean_test.rb",
+     "test/locator/element/button_test.rb",
+     "test/locator/element/field_test.rb",
+     "test/locator/element/form_test.rb",
+     "test/locator/element/label_test.rb",
+     "test/locator/element/link_test.rb",
+     "test/locator/element/select_option_test.rb",
+     "test/locator/element/select_test.rb",
+     "test/locator/element/text_area_test.rb",
+     "test/locator/element_test.rb",
+     "test/locator/xpath_test.rb",
      "test/locator_test.rb",
-     "test/test_helper.rb",
-     "test/xpath/boolean_test.rb",
-     "test/xpath/xpath_test.rb"
+     "test/test_helper.rb"
   ]
   s.homepage = %q{http://github.com/svenfuchs/locator}
   s.rdoc_options = ["--charset=UTF-8"]
@@ -61,19 +70,19 @@ Gem::Specification.new do |s|
   s.summary = %q{Generic html element locators for integration testing}
   s.test_files = [
     "test/all.rb",
-     "test/element/button_test.rb",
-     "test/element/field_test.rb",
-     "test/element/form_test.rb",
-     "test/element/label_test.rb",
-     "test/element/link_test.rb",
-     "test/element/select_option_test.rb",
-     "test/element/select_test.rb",
-     "test/element/text_area_test.rb",
-     "test/element_test.rb",
+     "test/locator/boolean_test.rb",
+     "test/locator/element/button_test.rb",
+     "test/locator/element/field_test.rb",
+     "test/locator/element/form_test.rb",
+     "test/locator/element/label_test.rb",
+     "test/locator/element/link_test.rb",
+     "test/locator/element/select_option_test.rb",
+     "test/locator/element/select_test.rb",
+     "test/locator/element/text_area_test.rb",
+     "test/locator/element_test.rb",
+     "test/locator/xpath_test.rb",
      "test/locator_test.rb",
-     "test/test_helper.rb",
-     "test/xpath/boolean_test.rb",
-     "test/xpath/xpath_test.rb"
+     "test/test_helper.rb"
   ]
 
   if s.respond_to? :specification_version then

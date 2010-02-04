@@ -1,18 +1,20 @@
 require 'core_ext/string/underscore'
 
-class Locator
-  autoload :Actions, 'locator/actions'
+module Locator
+  autoload :Boolean, 'locator/boolean'
   autoload :Dom,     'locator/dom'
   autoload :Element, 'locator/element'
+  autoload :Result,  'locator/result'
   autoload :Xpath,   'locator/xpath'
 
   class << self
     def [](type)
-      locators[type.to_sym]
+      locators[type.to_sym] || raise("unknown locator type: #{type}")
     end
 
-    def xpath(type, *args)
-      Locator[type].new.xpath(*args)
+    def build(type)
+      locator = locators[type.to_sym] if type
+      locator ? locator.new : Locator::Element.new(type)
     end
 
     protected
@@ -24,29 +26,49 @@ class Locator
       end
   end
 
-  attr_reader :dom, :scopes
-
-  def initialize(dom)
-    @dom = dom.respond_to?(:elements_by_xpath) ? dom : Dom.page(dom)
-    @scopes = []
+  def xpath(type, *args)
+    Locator[type].new.xpath(*args)
   end
 
-  def locate(type, *args)
+  def locate(dom, *args, &block)
+    return args.first if args.first.respond_to?(:elements_by_xpath)
+
     options = Hash === args.last ? args.last : {}
-    if scope = options.delete(:within)
-      within(scope) { locate(type, *args) }
+    result = if scope = options.delete(:within)
+      within(*Array(scope)) { locate(dom, *args) }
     else
-      path = type.is_a?(Symbol) ? Locator.xpath(type, *args) : type
-      scope = scopes.pop || dom
-      scope.elements_by_xpath(path).first
+      type = args.shift if args.first.is_a?(Symbol)
+      Locator.build(type).locate(current_scope(dom), *args)
     end
+
+    result && block_given? ? within(result) { yield(self) } : result
   end
 
-  # TODO currently only take an xpath or element
-  def within(scope, &block)
-    scope = scope.is_a?(Hash) ? scope.delete(:xpath) : scope
-    scope = locate(scope) unless scope.respond_to?(:xpath)
+  def within(*scope)
     scopes.push(scope)
-    instance_eval(&block)
+    yield(self)
   end
+
+  protected
+
+    def current_scope(dom)
+      dom = Locator::Dom.page(dom) unless dom.respond_to?(:elements_by_xpath)
+
+      case (scope = scopes.pop) && scope.first
+      when NilClass
+        dom
+      when %r(^\.?//)
+        dom.elements_by_xpath(scope.first).first
+      when String
+        dom.elements_by_css(scope.first).first
+      else
+        locate(dom, *scope)
+      end
+    end
+
+    def scopes
+      @scopes ||= []
+    end
+
+  extend(self)
 end

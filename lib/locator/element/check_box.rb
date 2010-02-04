@@ -1,8 +1,8 @@
 module Locator
   class Element
-    class Link < Element
+    class CheckBox < Input
       def initialize
-        super('a', nil, :href => true)
+        super(:type => :checkbox)
       end
     end
   end

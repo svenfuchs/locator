@@ -1,8 +1,8 @@
 module Locator
   class Element
-    class Link < Element
+    class HiddenField < Input
       def initialize
-        super('a', nil, :href => true)
+        super(:type => :hidden)
       end
     end
   end

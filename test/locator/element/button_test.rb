@@ -5,22 +5,27 @@ class ElementButtonTest < Test::Unit::TestCase
   Button = Locator::Element::Button
 
   test "finds a button" do
-    assert_locate '<button></button>', Button.new.xpath
+    html = '<button></button>'
+    assert_equal 'button', Button.new.locate(html).tag_name
   end
 
   test "finds a submit input" do
-    assert_locate '<input type="submit">', Button.new.xpath
+    html = '<input type="submit">'
+    assert_equal 'input', Button.new.locate(html).tag_name
   end
 
   test "finds a button input" do
-    assert_locate '<input type="button">', Button.new.xpath
+    html = '<input type="button">'
+    assert_equal 'input', Button.new.locate(html).tag_name
   end
 
   test "finds an image input" do
-    assert_locate '<input type="image">', Button.new.xpath
+    html = '<input type="image">'
+    assert_equal 'input', Button.new.locate(html).tag_name
   end
 
   test "does not find a checkbox input" do
-    assert_no_locate '<input type="checkbox">', Button.new.xpath
+    html = '<input type="checkbox">'
+    assert_nil Button.new.locate(html)
   end
 end

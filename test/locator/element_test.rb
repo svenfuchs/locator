@@ -1,40 +1,98 @@
 require File.expand_path('../../test_helper', __FILE__)
-require 'locator/element'
 
-class ElementTest < Test::Unit::TestCase
-  def xpath(*args)
-    Locator::Element.new('foo', [:id, :content]).xpath(*args)
-  end
-
-  test "no selector given => finds all element" do
-    assert_locate '<foo></foo><foo></foo>', xpath, ['<foo></foo>', '<foo></foo>']
+class LocatorElementTest < Test::Unit::TestCase
+  include Locator
+  
+  # xpath
+  
+  test "xpath without further arguments given" do
+    assert_equal './/*', Element.new.xpath
   end
   
-  test "given selector equals content => finds the element" do
-    assert_locate '<foo>foo</foo>', xpath('foo')
+  test "xpath with a node name" do
+    xpath = Element.new(:div).xpath
+    assert_equal './/div', xpath
   end
   
-  test "given selector contained in content => finds the element" do
-    assert_locate '<foo>foo!</foo>', xpath('foo')
+  test "xpath with attributes" do
+    xpath = Element.new(nil, nil, :type => 'type', :class => 'class').xpath
+    assert_equal ".//*[@type=\"type\"][contains(concat(' ', @class, ' '), concat(' ', \"class\", ' '))]", xpath
   end
   
-  test "given selector equals id => finds the element" do
-    assert_locate '<foo id="foo"></foo>', xpath('foo')
+  test "xpath with node name and attributes" do
+    xpath = Element.new(:div, nil, :type => 'type', :class => 'class').xpath
+    assert_equal ".//div[@type=\"type\"][contains(concat(' ', @class, ' '), concat(' ', \"class\", ' '))]", xpath
   end
   
-  test "given selector contained in id => does not find the element" do
-    assert_no_locate '<foo id="foobar"></foo>', xpath('foo')
+  # all
+  
+  test "all selects all elements when given no attributes" do
+    html = '<a class="foo"></a><p class="bar"></p>'
+    elements = Element.new.all(html)
+    assert_equal %w(html body a p), elements.map { |element| element.tag_name }
   end
   
-  test "given attribute equals attribute => finds the element" do
-    assert_locate '<foo class="foo">a</foo>', xpath(:class => 'foo')
+  test "all selects all nodes with given node name" do
+    html = '<a class="foo"></a><p class="bar"></p>'
+    elements = Element.new('a').all(html)
+    assert_equal %w(a), elements.map { |element| element.tag_name }
   end
   
-  test "given attribute contained in attribute => does not find the element" do
-    assert_no_locate '<foo class="foo-bar">a</foo>', xpath(:class => 'foo')
+  test "all selects all nodes with attribute given to initialize" do
+    html = '<a class="foo"></a><p class="bar"></p>'
+    elements = Element.new(nil, nil, :class => 'foo').all(html)
+    assert_equal %w(a), elements.map { |element| element.tag_name }
   end
   
-  test "selector + attributes => finds the element" do
-    assert_locate '<foo class="foo" title="bar">bar</foo>', xpath('bar', :class => 'foo', :title => 'bar')
+  test "all selects all nodes with attribute given to all" do
+    html = '<a class="foo"></a><p class="bar"></p>'
+    elements = Element.new.all(html, :class => 'foo')
+    assert_equal %w(a), elements.map { |element| element.tag_name }
+  end
+  
+  # locate
+  
+  test "locate selects an element based on the length of the matching value" do
+    html = %(
+      <a href="#">the link with extra text</a>
+      <a href="http://www.some-very-long-url.com">the link ...</a>
+    )
+    element = Element.new.locate(html, 'the link')
+    assert_equal 'the link ...', element.content
+  end
+  
+  test "locate selects an element containing whitespace" do
+    html = %(
+      <a href="#">
+        the
+        link
+      </a>
+    )
+    assert Element.new.locate(html, 'the link')
+  end
+  
+  test "locate selects an element containing extra tags" do
+    html = '<a href="#">the <span>link</span></a>'
+    assert Element.new.locate(html, 'the link')
+  end
+  
+  test "locate selects an element containing extra text (1)" do
+    html = '<a href="#">the link &raquo;</label>'
+    assert Element.new.locate(html, 'the link')
+  end
+  
+  test "locate selects an element containing extra text (2)" do
+    html = '<a href="#">(the link)</label>'
+    assert Element.new.locate(html, 'the link')
+  end
+  
+  test "does not find a link when id does not match" do
+    html = '<a href="" id="bar"></a>'
+    assert_nil Element.new.locate(html, :id => 'foo')
+  end
+  
+  test "does not find a link when class does not match" do
+    html = '<a href="" class="bar"></a>'
+    assert_nil Element.new.locate(html, :class => 'foo')
   end
 end

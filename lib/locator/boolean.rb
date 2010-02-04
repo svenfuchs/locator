@@ -1,4 +1,4 @@
-class Locator
+module Locator
   module Boolean
     class Terms < Array
       def and!(other)
