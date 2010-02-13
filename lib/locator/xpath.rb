@@ -2,8 +2,14 @@ module Locator
   Boolean::Or.operator, Boolean::And.operator = ' | ', ''
 
   class Xpath < Array
+    class << self
+      def xpath?(string)
+        string =~ %r(^\.?//)
+      end
+    end
+    
     def initialize(name = nil, attributes = {})
-      super(Array(name || '*').map { |name| xpath?(name) ? name : ".//#{name}" })
+      super(Array(name || '*').map { |name| self.class.xpath?(name) ? name : ".//#{name}" })
 
       attributes.each do |name, value|
         case name
@@ -47,11 +53,7 @@ module Locator
     protected
 
       def quote(value)
-        xpath?(value) ? value : "\"#{value}\""
-      end
-
-      def xpath?(string)
-        string =~ %r(^\.?//)
+        self.class.xpath?(value) ? value : "\"#{value}\""
       end
   end
 end

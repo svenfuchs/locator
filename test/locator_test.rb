@@ -18,9 +18,17 @@ class LocatorTest < Test::Unit::TestCase
     assert_equal './/form[@id="bar"]', xpath
   end
 
-  test "locates an element from html" do
-    html = '<html><body><p></p><form class="bar"></form></body></html>'
+  # locate
+
+  test "locates an element by node name" do
+    html = '<html><body><form></form></body></html>'
     element = Locator.locate(html, :form)
+    assert_equal 'form', element.tag_name
+  end
+
+  test "locates an element by xpath" do
+    html = '<html><body><form></form></body></html>'
+    element = Locator.locate(html, :xpath => '//form')
     assert_equal 'form', element.tag_name
   end
 
