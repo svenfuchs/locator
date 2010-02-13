@@ -13,6 +13,10 @@ module Locator
           to_s.length <=> other.to_s.length
         end
 
+        def name
+          @element.name
+        end
+
         def xpath
           element.path.to_s
         end
@@ -20,7 +24,7 @@ module Locator
         def css_path
           element.css_path.to_s
         end
-        
+
         def content
           element.content
         end
@@ -49,8 +53,16 @@ module Locator
           names.map { |name| attribute(name) }
         end
 
-        def elements_by_xpath(xpath)
-          element.xpath(xpath).map { |element| Element.new(element) }
+        def element_by_id(id)
+          elements_by_xpath("//*[@id='#{id}']").first
+        end
+
+        def elements_by_css(*rules)
+          element.css(*rules).map { |element| Element.new(element) }
+        end
+
+        def elements_by_xpath(*xpaths)
+          element.xpath(*xpaths).map { |element| Element.new(element) }
         end
       end
     end
