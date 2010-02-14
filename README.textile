@@ -2,7 +2,9 @@
 
 h1. Locator
 
-This library aims to extract common html element selection from testing tools such as "Webrat":http://github.com/brynary/webrat/blob/master/lib/webrat/core/locators.rb, "Capybara":http://github.com/jnicklas/capybara/blob/master/lib/capybara/xpath.rb or "Steam":http://github.com/svenfuchs/steam/blob/master/lib/steam/locators.rb. At its core it constructs "XPath":http://github.com/svenfuchs/locator/blob/master/lib/locator/xpath.rb objects using a simple "boolean expression engine":http://github.com/svenfuchs/locator/blob/master/lib/locator/boolean.rb in order to locate elements in a Nokogiri DOM. It provides a bunch of "Element classes":http://github.com/svenfuchs/locator/blob/master/lib/locator/element.rb that are targeted at implementing a Webrat-style DSL for convenience.
+This Gem aims to extract common html element selection from testing tools such as "Webrat":http://github.com/brynary/webrat/blob/master/lib/webrat/core/locators.rb, "Capybara":http://github.com/jnicklas/capybara/blob/master/lib/capybara/xpath.rb or "Steam":http://github.com/svenfuchs/steam/blob/master/lib/steam/locators.rb. At its core it constructs "XPath":http://github.com/svenfuchs/locator/blob/master/lib/locator/xpath.rb objects using a simple "boolean expression engine":http://github.com/svenfuchs/locator/blob/master/lib/locator/boolean.rb in order to locate elements in a Nokogiri DOM. It provides a bunch of "Element classes":http://github.com/svenfuchs/locator/blob/master/lib/locator/element.rb that are targeted at implementing a Webrat-style DSL for convenience.
+
+"See below":#why-another-library for why I strongly believe that this behavior should be implemented as a stand-alone library.
 
 h2. Usage
 
@@ -133,3 +135,14 @@ pre. locate(html, :link, "link")
 
 will find both a link with the text "link" as well as "The link" but it will select and return the first one because it has the shorter matching value (i.e. "link").
 
+<a name="why-another-library"></a>
+
+h3. Why another library?
+
+I strongly believe that small targeted tools that do one thing well and refrain from doing anything else are the better way to go.
+
+Each of the aforementioned libraries do way to much in my opinion. Amongst many other things they all implement tools for locating HTML elements from a Dom in some way. When we look at the details of the implementation they all do it differently though. So moving a test suite from Webrat to Capybara or Steam might be easy if only the simplest and most common helpers are used. But it can also be a huge pita because of all the tiny differences in those libraries.
+
+Thus, having a library that does nothing but locating elements but does this one thing well and can then be used by other solutions that add other features is the way to go.
+
+By now Locator has been integrated to Steam (which already very much streamlined Steam's API). Obviously I would be humbled if other solutions would pick up Locator, too, and I do offer my help for working on this.
