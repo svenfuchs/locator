@@ -5,11 +5,11 @@
 
 Gem::Specification.new do |s|
   s.name = %q{locator}
-  s.version = "0.0.2"
+  s.version = "0.0.3"
 
   s.required_rubygems_version = Gem::Requirement.new(">= 0") if s.respond_to? :required_rubygems_version=
   s.authors = ["Sven Fuchs"]
-  s.date = %q{2010-02-09}
+  s.date = %q{2010-02-13}
   s.description = %q{Generic html element locators for integration testing}
   s.email = %q{svenfuchs@artweb-design.de}
   s.extra_rdoc_files = [
