@@ -40,7 +40,7 @@ class LocatorElementTest < Test::Unit::TestCase
 
   test "all selects all nodes with attribute given to initialize" do
     html = '<a class="foo"></a><p class="bar"></p>'
-    elements = Element.new(nil, :class => 'foo').all(html)
+    elements = Element.new(:class => 'foo').all(html)
     assert_equal %w(a), elements.map { |element| element.tag_name }
   end
 
