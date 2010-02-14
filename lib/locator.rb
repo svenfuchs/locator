@@ -26,7 +26,8 @@ module Locator
       end
   end
 
-  def xpath(type, *args)
+  def xpath(*args)
+    type = args.shift if args.first.is_a?(Symbol)
     Locator[type].new.xpath(*args)
   end
 

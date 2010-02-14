@@ -20,16 +20,16 @@ class LocatorTest < Test::Unit::TestCase
 
   # locate
 
-  test "locates an element by node name" do
-    html = '<html><body><form></form></body></html>'
+  test "locates the first element by node name" do
+    html = '<html><body><form id="foo"></form><form id="bar"></form></body></html>'
     element = Locator.locate(html, :form)
-    assert_equal 'form', element.tag_name
+    assert_equal 'foo', element.attribute('id')
   end
 
-  test "locates an element by xpath" do
-    html = '<html><body><form></form></body></html>'
+  test "locates the first element by xpath" do
+    html = '<html><body><form id="foo"></form><form id="bar"></form></body></html>'
     element = Locator.locate(html, :xpath => '//form')
-    assert_equal 'form', element.tag_name
+    assert_equal 'foo', element.attribute('id')
   end
 
   # within
@@ -77,9 +77,9 @@ class LocatorTest < Test::Unit::TestCase
   end
 
   test "locate when given a block scopes the block to the located element" do
-    html = '<form></form><div><form><p id="foo"><p></form></div>'
+    html = '<p id="foo"><p><form></form><div><form><p id="bar"><p></form></div>'
     element = locate(html, :div) { locate(html, :form)  { locate(html, :p) } }
-    assert_equal 'foo', element.attribute('id')
+    assert_equal 'bar', element.attribute('id')
   end
 
   test "locate does not yield the block when no element was found (would otherwise locate in global scope)" do

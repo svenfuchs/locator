@@ -1,13 +1,135 @@
+<a name="readme"></a>
+
 h1. Locator
 
 This library aims to extract common html element selection from testing tools such as "Webrat":http://github.com/brynary/webrat/blob/master/lib/webrat/core/locators.rb, "Capybara":http://github.com/jnicklas/capybara/blob/master/lib/capybara/xpath.rb or "Steam":http://github.com/svenfuchs/steam/blob/master/lib/steam/locators.rb. At its core it constructs "XPath":http://github.com/svenfuchs/locator/blob/master/lib/locator/xpath.rb objects using a simple "boolean expression engine":http://github.com/svenfuchs/locator/blob/master/lib/locator/boolean.rb in order to locate elements in a Nokogiri DOM. It provides a bunch of "Element classes":http://github.com/svenfuchs/locator/blob/master/lib/locator/element.rb that are targeted at implementing a Webrat-style DSL for convenience.
 
 h2. Usage
 
-Of course you can use the underlying implementation, too, but there are three main public methods which are supposed to give you access to all you need.
+Of course you can use the underlying implementation, too, but there are three main public methods which are supposed to give you access to all you need:
 
-h3. Building an XPath
+* @Locator.locate(html, *args)@
+* @Locator.within(*args)@
+* @Locator.xpath(*args)@
+
+The following code examples all assume that you include the Locator module like so:
+
+pre. include Locator
+
+All the examples should work without doing so though. You should be able to statically call the same methods on the Locator module instead.
 
 h3. Locating an element
 
+There are three APIs for locating elements:
+
+* using a locator type (e.g. :link) and/or required node attributes (e.g. :id => 'foo') and/or a selector (e.g. "The link")
+* using an xpath
+* using a css selector
+
+In all cases you can use the Locator.locate method which wants you to pass the HTML code as the first argument:
+
+pre. locate(html, *args)
+
+h4. Locating elements using a locator type
+
+If you pass a *Symbol* as a first argument, then Locator will interpret this as a *locator type*. For a list of "supported locator types":#locator-types see below, these sometimes but do not always equal HTML tag node names.
+
+E.g. the :form tag will simply locate HTML form tags. Locator types like :button, :field and :link bake in some more knowledge about how we want to build a DSL (e.g. a helper locator_button could use the Button locator type and match both HTML button tags and clickable input tags such as submit input tags).
+
+So this will simply return the first link tag on the page:
+
+pre. locate(html, :link)
+
+h4. Locating elements using a selector
+
+You can (alternatively or additionally) specify a *selector*. Selectors will be matched against matchable values depending on the locator type, "see below":#matchable-values for details.
+
+E.g. to find a link that has the text "Click here!" you could use any of the following calls:
+
+<pre>locate(html, :link, "Click here!")
+locate(html, :link, "Click")
+locate(html, :link, "here!")
+locate(html, "Click")</pre>
+
+And so on. Note that Locator will pick the element with the shortest matching value, see below for details about "matchable values":#matchable-values.
+
+h4. Locating elements using attributes
+
+You can (alternatively or additionally) specify required attributes. E.g. to find a link with the id "foo" you can use:
+
+pre. locate(html, :link, :id => "foo")
+
+You can combine that with a selector. E.g. this will locate a link that has a text "click" and a class "foo":
+
+pre. locate(html, :link, "click", :class => "foo")
+
+h4. Locating elements using an XPath or CSS selector
+
+Instead using the API described above you can also specify an XPath or CSS selector like so:
+
+<pre>locate(html, :xpath => "//div[@id='foo']")
+locate(html, :xpath => "div#foo")</pre>
+
+These both would lookup the same div element with the id "foo".
+
 h3. Scoping to an element
+
+You can scope the element lookup to certain parts of your HTML Dom. E.g. this is useful when you have a couple of forms with the same input elements and you want to fill in a particular one.
+
+You can use both the Locator.locate and Locator.within methods for this:
+
+pre. within(:form, "login_form") { locate(html, :field, "password") }
+
+Or:
+
+pre. locate(html, :form, "login_form") { locate(html, :field, "password") }
+
+h2. Appendix
+
+<a name="locator-types"></a>
+
+h3. Supported locator types
+
+All types will match the id attribute, all form elements (input, textarea etc.) additionally match the name attribute. Some locators additionally match the value attribute and/or the node content (inner_text). Also see below for "matchable values":#matchable-values.
+
+All form element locator types (like :field, :checkbox, :file etc.) can additionally be located through their label tag. E.g. when you have a label tag "Name" that points to a text input tag then you can locate the text input using the text selector "Name". E.g.:
+
+pre. locate(html, :field, "Name")
+
+Here's a list of supported locator types and any additional matchable values:
+
+| *Type*         | *Locates*                                                                     | *Extra matchable*                         |
+| :button        | a button element or a submit, button or image input tag                       | content (for buttons), value (for inputs) |
+| :check_box     | a checkbox input tag                                                          |                                           |
+| :field         | an input element (see below) or a textarea                                    |                                           |
+| :file          | a file input tag                                                              |                                           |
+| :form          | a form tag                                                                    |                                           |
+| :hidden_field  | a hidden input tag                                                            |                                           |
+| :input         | an input tag with a type of text, password , email, url, search, tel or color |                                           |
+| :label         | a label tag                                                                   | content                                   |
+| :link          | a link (i.e. an :a tag with an href attribute)                                | content                                   |
+| :radio_button  | a radio input tag                                                             |                                           |
+| :select        | a select box                                                                  |                                           |
+| :select_option | a select option tag                                                           | value, content                            |
+| :text_area     | a textarea tag                                                                |                                           |
+
+<a name="matchable-values"></a>
+
+h3. Matchable values
+
+When given a selector Locator will match it against different node values depending on the locator type. Node attributes like id, name and value need to equal the given selector. The node content needs to include the selector text (case sensitive).
+
+Locator will then pick the element with the *shortest* matching value.
+
+| *Matchable*  | *Looks at*                    | *Match type*         |
+| content      | the element's full inner text | contained in content |
+| id           | the elements id attribute     | equals               |
+| name         | the elements name attribute   | equals               |
+| value        | the elements value attribute  | equals               |
+
+E.g.
+
+pre. locate(html, :link, "link")
+
+will find both a link with the text "link" as well as "The link" but it will select and return the first one because it has the shorter matching value (i.e. "link").
+
