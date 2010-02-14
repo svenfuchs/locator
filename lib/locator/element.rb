@@ -1,3 +1,6 @@
+require 'core_ext/hash/except'
+require 'core_ext/hash/slice'
+
 module Locator
   class Element
     autoload :Area,           'locator/element/area'
@@ -20,10 +23,10 @@ module Locator
 
     attr_reader :name, :css, :locatables, :attributes
 
-    def initialize(name = nil, locatables = nil, attributes = nil)
+    def initialize(name = nil, options = {})
       @name = name
-      @locatables = { :equals => :id, :matches => :content }.merge(locatables || {})
-      @attributes = attributes || {}
+      @attributes = options.slice!(:equals, :matches)
+      @locatables = { :equals => :id, :matches => :content }.merge(options || {})
     end
 
     def locate(*args)

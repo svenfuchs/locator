@@ -15,12 +15,12 @@ class LocatorElementTest < Test::Unit::TestCase
   end
 
   test "xpath with attributes" do
-    xpath = Element.new(nil, nil, :type => 'type', :class => 'class').xpath
+    xpath = Element.new(nil, :type => 'type', :class => 'class').xpath
     assert_equal ".//*[@type=\"type\"][contains(concat(' ', @class, ' '), concat(' ', \"class\", ' '))]", xpath
   end
 
   test "xpath with node name and attributes" do
-    xpath = Element.new(:div, nil, :type => 'type', :class => 'class').xpath
+    xpath = Element.new(:div, :type => 'type', :class => 'class').xpath
     assert_equal ".//div[@type=\"type\"][contains(concat(' ', @class, ' '), concat(' ', \"class\", ' '))]", xpath
   end
 
@@ -40,7 +40,7 @@ class LocatorElementTest < Test::Unit::TestCase
 
   test "all selects all nodes with attribute given to initialize" do
     html = '<a class="foo"></a><p class="bar"></p>'
-    elements = Element.new(nil, nil, :class => 'foo').all(html)
+    elements = Element.new(nil, :class => 'foo').all(html)
     assert_equal %w(a), elements.map { |element| element.tag_name }
   end
 
