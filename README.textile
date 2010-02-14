@@ -146,3 +146,12 @@ Each of the aforementioned libraries do way to much in my opinion. Amongst many 
 Thus, having a library that does nothing but locating elements but does this one thing well and can then be used by other solutions that add other features is the way to go.
 
 By now Locator has been integrated to Steam (which already very much streamlined Steam's API). Obviously I would be humbled if other solutions would pick up Locator, too, and I do offer my help for working on this.
+
+
+TODO
+
+* clarify that "Matchable values" refers to when a text selector is being used
+* add notes about html class names being matched differently
+* add notes about nested tags in content
+* add notes about using Locator::Element classes directly
+

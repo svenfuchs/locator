@@ -24,6 +24,11 @@ class LocatorElementTest < Test::Unit::TestCase
     assert_equal ".//div[@type=\"type\"][contains(concat(' ', @class, ' '), concat(' ', \"class\", ' '))]", xpath
   end
 
+  test "xpath with multiple node name and attributes" do
+    xpath = Element.new([:div, :p], :type => 'type').xpath
+    assert_equal ".//div[@type=\"type\"] | .//p[@type=\"type\"]", xpath
+  end
+
   # all
 
   test "all selects all elements when given no attributes" do
