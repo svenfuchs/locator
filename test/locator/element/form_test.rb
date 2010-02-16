@@ -6,22 +6,22 @@ class ElementFormTest < Test::Unit::TestCase
 
   test "finds a form" do
     html = '<form></form>'
-    assert_equal 'form', Form.new.locate(html).tag_name
+    assert_equal 'form', Form.new.locate(html).name
   end
 
   test "finds a form by id" do
     html = '<form id="foo"></form>'
-    assert_equal 'form', Form.new.locate(html, 'foo').tag_name
+    assert_equal 'form', Form.new.locate(html, 'foo').name
   end
 
   test "finds a form by name" do
     html = '<form name="foo"></form>'
-    assert_equal 'form', Form.new.locate(html, 'foo').tag_name
+    assert_equal 'form', Form.new.locate(html, 'foo').name
   end
 
   test "finds a form by class" do
     html = '<form class="foo"></form>'
-    assert_equal 'form', Form.new.locate(html, :class => 'foo').tag_name
+    assert_equal 'form', Form.new.locate(html, :class => 'foo').name
   end
 
   test "does not find a form when id does not match" do

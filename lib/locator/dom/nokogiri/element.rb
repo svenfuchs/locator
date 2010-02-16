@@ -14,7 +14,7 @@ module Locator
         end
 
         def name
-          @element.name
+          element.name
         end
 
         def xpath
@@ -37,32 +37,32 @@ module Locator
           element.to_s
         end
 
-        def tag_name
-          element.description.name
-        end
-
-        def ancestor_of?(other)
-          other.element.ancestors.include?(element)
-        end
-
         def attribute(name)
           element.attribute(name).to_s
-        end
-
-        def attributes(names)
-          names.map { |name| attribute(name) }
         end
 
         def element_by_id(id)
           elements_by_xpath("//*[@id='#{id}']").first
         end
 
+        def element_by_xpath(xpath)
+          elements_by_xpath(xpath).first
+        end
+        
+        def elements_by_xpath(*xpaths)
+          element.xpath(*xpaths).map { |element| Element.new(element) }
+        end
+
         def elements_by_css(*rules)
           element.css(*rules).map { |element| Element.new(element) }
         end
 
-        def elements_by_xpath(*xpaths)
-          element.xpath(*xpaths).map { |element| Element.new(element) }
+        def ancestors
+          element.ancestors
+        end
+
+        def ancestor_of?(other)
+          other.ancestors.include?(element)
         end
       end
     end

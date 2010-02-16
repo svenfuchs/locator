@@ -50,7 +50,8 @@ module Locator
       def lookup(scope, selector, attributes = {})
         scope = scope.respond_to?(:elements_by_xpath) ? scope : Locator::Dom.page(scope)
         xpath, css = attributes.delete(:xpath), attributes.delete(:css)
-        elements = css ? scope.elements_by_css(css) : scope.elements_by_xpath(xpath || xpath(attributes))
+        xpath = ::Nokogiri::CSS.xpath_for(*css).first if css
+        elements = scope.elements_by_xpath(xpath || xpath(attributes))
         Result.new(elements).filter!(selector, locatables)
       end
   end

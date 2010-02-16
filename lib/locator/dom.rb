@@ -2,6 +2,7 @@ require 'nokogiri'
 
 module Locator
   module Dom
+    autoload :Htmlunit, 'locator/dom/htmlunit'
     autoload :Nokogiri, 'locator/dom/nokogiri'
     
     class << self

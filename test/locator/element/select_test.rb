@@ -5,17 +5,17 @@ class ElementSelectTest < Test::Unit::TestCase
 
   test "finds a select" do
     html = '<select id="foo" class="foo"></select><select id="bar" class="bar"></select>'
-    assert_equal 'select', Select.new.locate(html).tag_name
+    assert_equal 'select', Select.new.locate(html).name
   end
 
   test "finds a select by id" do
     html = '<select id="foo"></select>'
-    assert_equal 'select', Select.new.locate(html, 'foo').tag_name
+    assert_equal 'select', Select.new.locate(html, 'foo').name
   end
 
   test "finds a select by class" do
     html = '<select class="foo"></select>'
-    assert_equal 'select', Select.new.locate(html, :class => 'foo').tag_name
+    assert_equal 'select', Select.new.locate(html, :class => 'foo').name
   end
 
   test "does not find a select when id does not match" do

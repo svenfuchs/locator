@@ -34,25 +34,25 @@ class LocatorElementTest < Test::Unit::TestCase
   test "all selects all elements when given no attributes" do
     html = '<a class="foo"></a><p class="bar"></p>'
     elements = Element.new.all(html)
-    assert_equal %w(html body a p), elements.map { |element| element.tag_name }
+    assert_equal %w(html body a p), elements.map { |element| element.name }
   end
 
   test "all selects all nodes with given node name" do
     html = '<a class="foo"></a><p class="bar"></p>'
     elements = Element.new('a').all(html)
-    assert_equal %w(a), elements.map { |element| element.tag_name }
+    assert_equal %w(a), elements.map { |element| element.name }
   end
 
   test "all selects all nodes with attribute given to initialize" do
     html = '<a class="foo"></a><p class="bar"></p>'
     elements = Element.new(:class => 'foo').all(html)
-    assert_equal %w(a), elements.map { |element| element.tag_name }
+    assert_equal %w(a), elements.map { |element| element.name }
   end
 
   test "all selects all nodes with attribute given to all" do
     html = '<a class="foo"></a><p class="bar"></p>'
     elements = Element.new.all(html, :class => 'foo')
-    assert_equal %w(a), elements.map { |element| element.tag_name }
+    assert_equal %w(a), elements.map { |element| element.name }
   end
 
   # locate

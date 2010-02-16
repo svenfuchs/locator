@@ -6,27 +6,27 @@ class ElementSelectOptionOptionTest < Test::Unit::TestCase
 
   test "finds an option" do
     html = '<option></option>'
-    assert_equal 'option', SelectOption.new.locate(html).tag_name
+    assert_equal 'option', SelectOption.new.locate(html).name
   end
 
   test "finds an option by id" do
     html = '<option id="foo"></option>'
-    assert_equal 'option', SelectOption.new.locate(html, 'foo').tag_name
+    assert_equal 'option', SelectOption.new.locate(html, 'foo').name
   end
 
   test "finds an option by value" do
     html = '<option value="foo"></option>'
-    assert_equal 'option', SelectOption.new.locate(html, 'foo').tag_name
+    assert_equal 'option', SelectOption.new.locate(html, 'foo').name
   end
 
   test "finds an option by content" do
     html = '<option>foo</option>'
-    assert_equal 'option', SelectOption.new.locate(html, 'foo').tag_name
+    assert_equal 'option', SelectOption.new.locate(html, 'foo').name
   end
 
   test "finds an option by class attribute" do
     html = '<option class="foo"></option>'
-    assert_equal 'option', SelectOption.new.locate(html, :class => 'foo').tag_name
+    assert_equal 'option', SelectOption.new.locate(html, :class => 'foo').name
   end
 
   test "does not find an option when id does not match" do

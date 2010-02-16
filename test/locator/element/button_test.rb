@@ -6,22 +6,22 @@ class ElementButtonTest < Test::Unit::TestCase
 
   test "finds a button" do
     html = '<button></button>'
-    assert_equal 'button', Button.new.locate(html).tag_name
+    assert_equal 'button', Button.new.locate(html).name
   end
 
   test "finds a submit input" do
     html = '<input type="submit">'
-    assert_equal 'input', Button.new.locate(html).tag_name
+    assert_equal 'input', Button.new.locate(html).name
   end
 
   test "finds a button input" do
     html = '<input type="button">'
-    assert_equal 'input', Button.new.locate(html).tag_name
+    assert_equal 'input', Button.new.locate(html).name
   end
 
   test "finds an image input" do
     html = '<input type="image">'
-    assert_equal 'input', Button.new.locate(html).tag_name
+    assert_equal 'input', Button.new.locate(html).name
   end
 
   test "does not find a checkbox input" do
