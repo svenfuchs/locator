@@ -29,6 +29,11 @@ class LocatorElementTest < Test::Unit::TestCase
     assert_equal ".//div[@type=\"type\"] | .//p[@type=\"type\"]", xpath
   end
 
+  test "xpath merges given attributes with element attributes" do
+    xpath = Element.new(:div, :foo => 'foo').xpath(:bar => 'bar')
+    assert_equal ".//div[@foo=\"foo\"][@bar=\"bar\"]", xpath
+  end
+
   # all
 
   test "all selects all elements when given no attributes" do

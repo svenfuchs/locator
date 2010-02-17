@@ -46,6 +46,10 @@ module Locator
       replace(self.map { |l| other.map { |r| "#{l}#{r}" } })
     end
 
+    def or!(other)
+      other.empty? ? self : replace([self.dup, other])
+    end
+
     def to_s
       flatten.join(' | ')
     end

@@ -24,10 +24,10 @@ module Locator
     attr_reader :name, :css, :locatables, :attributes
 
     def initialize(*args)
-      options, name = args.last.is_a?(Hash) ? args.pop : {}, args.pop
+      attributes, name = args.last.is_a?(Hash) ? args.pop : {}, args.pop
       @name = name
-      @attributes = options.slice!(:equals, :matches)
-      @locatables = { :equals => :id, :matches => :content }.merge(options || {})
+      @attributes = attributes
+      @locatables = ((attributes.delete(:matches) || [:content]) + [:id]).uniq
     end
 
     def locate(*args)

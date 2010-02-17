@@ -1,4 +1,4 @@
-somehow allow these?
+Somehow allow these?
 
   locate(html, :foo) { locate(:bar) }
   within(html, :foo) { locate(:bar) }

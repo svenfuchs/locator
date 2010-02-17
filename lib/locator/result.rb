@@ -1,13 +1,29 @@
 module Locator
   class Result < Array
+    MATCH_TYPES = {
+      :alt     => :contains,
+      :title   => :contains,
+      :content => :contains
+    }
+
     class << self
+      def matches?(name, value, selector)
+        value = normalize_whitespace(value)
+        case selector
+        when Regexp
+          value =~ selector
+        else
+          type = MATCH_TYPES[name] || :equals
+          send("#{type}?", value, selector)
+        end
+      end
+
       def equals?(value, selector)
         value == selector
       end
 
-      def matches?(value, selector)
-        value = normalize_whitespace(value)
-        Regexp === selector ? value =~ selector : value.include?(selector)
+      def contains?(value, selector)
+        value.include?(selector)
       end
 
       def normalize_whitespace(value)
@@ -20,7 +36,7 @@ module Locator
     end
 
     def filter(selector, locatables)
-      selector ? locatables.map { |(type, attrs)| filter_by(type, selector, attrs) }.flatten : self
+      selector ? filter_by(selector, locatables) : self
     end
 
     def sort!
@@ -34,11 +50,11 @@ module Locator
 
     protected
 
-      def filter_by(type, selector, attributes)
+      def filter_by(selector, attributes)
         select do |element|
           Array(attributes).any? do |name|
             value = name == :content ? element.content : element.attribute(name.to_s)
-            element.matches << value if self.class.send("#{type}?", value, selector)
+            element.matches << value if self.class.matches?(name, value, selector)
           end
         end
       end

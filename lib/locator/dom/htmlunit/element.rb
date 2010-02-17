@@ -21,9 +21,9 @@ module Locator
           element.getCanonicalXPath
         end
 
-        # def css_path
-        #   element.css_path.to_s
-        # end
+        def css_path
+          raise 'not implemented'
+        end
         
         def content
           # TODO HtmlUnit has asText and getTextContent
