@@ -24,7 +24,7 @@ h3. Locating an element
 
 There are three APIs for locating elements:
 
-* using a locator type (e.g. :link) and/or required node attributes (e.g. :id => 'foo') and/or a selector (e.g. "The link")
+* using a locator type (e.g. @:link@) and/or required node attributes (e.g. @:id => 'foo'@) and/or a selector (e.g. @"The link"@)
 * using an xpath
 * using a css selector
 
@@ -36,7 +36,7 @@ h4. Locating elements using a locator type
 
 If you pass a *Symbol* as a first argument, then Locator will interpret this as a *locator type*. For a list of "supported locator types":#locator-types see below, these sometimes but do not always equal HTML tag node names.
 
-E.g. the :form tag will simply locate HTML form tags. Locator types like :button, :field and :link bake in some more knowledge about how we want to build a DSL (e.g. a helper locator_button could use the Button locator type and match both HTML button tags and clickable input tags such as submit input tags).
+E.g. the @:form@ tag will simply locate HTML form tags. Locator types like @:button@, @:field@ and @:link@ bake in some more knowledge about how we want to build a DSL (e.g. a helper locator_button could use the Button locator type and match both HTML button tags and clickable input tags such as submit input tags).
 
 So this will simply return the first link tag on the page:
 
@@ -46,24 +46,28 @@ h4. Locating elements using a selector
 
 You can (alternatively or additionally) specify a *selector*. Selectors will be matched against matchable values depending on the locator type, "see below":#matchable-values for details.
 
-E.g. to find a link that has the text "Click here!" you could use any of the following calls:
+E.g. to find a link that has the text @"Click here!"@ you could use any of the following calls:
 
 <pre>locate(html, :link, "Click here!")
 locate(html, :link, "Click")
 locate(html, :link, "here!")
 locate(html, "Click")</pre>
 
-And so on. Note that Locator will pick the element with the shortest matching value, see below for details about "matchable values":#matchable-values.
+And so on. Note that Locator will pick the *outermost* element with the *shortest matching value*, see below for details about "matchable values":#matchable-values.
 
 h4. Locating elements using attributes
 
-You can (alternatively or additionally) specify required attributes. E.g. to find a link with the id "foo" you can use:
+You can (alternatively or additionally) specify required attributes. E.g. to find a link with the id @"foo"@ you can use:
 
 pre. locate(html, :link, :id => "foo")
 
 You can combine that with a selector. E.g. this will locate a link that has a text "click" and a class "foo":
 
 pre. locate(html, :link, "click", :class => "foo")
+
+All attributes are matched by equality. I.e. when you pass @:id => "foo"@ then only elements are matched that have the exact id attribute "foo". The only *exception* from this is the @:class@ attribute. When you pass @:class => "foo"@ then this is semantically equivalent to saying "an element that has the class 'foo'". 
+
+(Technically the class attribute is matched using an xpath @*[contains(concat(' ', @class, ' '), concat(' ', "foo", ' '))]@, i.e. leading and tailing spaces are added to the element's class attribute value and the requested value, and then it checks that the requested value is contained in the actual class attribute value.)
 
 h4. Locating elements using an XPath or CSS selector
 
@@ -119,9 +123,9 @@ Here's a list of supported locator types and any additional matchable values:
 
 h3. Matchable values
 
-When given a selector Locator will match it against different node values depending on the locator type. Node attributes like id, name and value need to equal the given selector. The node content needs to include the selector text (case sensitive).
+When given a *selector* Locator (as in @locate("The link")@) will match it against different node values depending on the locator type. Node attributes like id, name and value need to equal the given selector. The node content needs to include the selector text (case sensitive).
 
-Locator will then pick the element with the *shortest* matching value.
+Locator will then pick the *outermost* element with the *shortest* matching value.
 
 | *Matchable*  | *Looks at*                    | *Match type*         |
 | content      | the element's full inner text | contained in content |
@@ -129,19 +133,45 @@ Locator will then pick the element with the *shortest* matching value.
 | name         | the elements name attribute   | equals               |
 | value        | the elements value attribute  | equals               |
 
-E.g.
+E.g. @locate(html, :link, "link")@ will find both a link with the text @"link"@ as well as @"The link"@ but it will select and return the first one because it has the shorter matching value (i.e. @"link"@).
 
-pre. locate(html, :link, "link")
+Locator regards the inner text of an element as its content. That means that the given HTML structure looks like this:
 
-will find both a link with the text "link" as well as "The link" but it will select and return the first one because it has the shorter matching value (i.e. "link").
+<pre><div>
+  <div>
+    Some <span>text</span>
+  </div>
+</div></pre>
+
+... then @locate(:div, "Some text")@ will locate the outer div because it a) ignores the nested span so that the content (inner text) is @"Some text"@ and b) the contents of both div elements are the same.
+
+The same locator will return the inner div though when given the following HTML structure:
+
+<pre><div>
+  <div>
+    Some <span>text</span>
+  </div>
+  here
+</div></pre>
+
+... because the content of the outer div now is @"Some text here"@ which is longer than @"Some text"@ and Locator returns the *outermost* element with the *shortest*@ matching value.
+
+This might seem complicated at first but it is required and quite consistent if you think about it. 
+
+One obvious reason for returning the outermost element is that one wants @locate@ and @within@ behave the same way. If within would refer to the innermost element though then the following locator would not find any element in the HTML above which would be highly confusing:
+
+<pre>within(:div) { within(:div) { locate(:span) } }</pre>
+
+And an obvious reason for returning an element with the shortest matching value is that in the following case one will want @locate("The Link")@ to return the second element, not the first one:
+
+<pre><a href="#">The link with extra text</a>
+<a href="http://www.some-very-long-url.com">The link!</a></pre>
 
 <a name="why-another-library"></a>
 
 h3. Why another library?
 
-I strongly believe that small targeted tools that do one thing well and refrain from doing anything else are the better way to go.
-
-Each of the aforementioned libraries do way to much in my opinion. Amongst many other things they all implement tools for locating HTML elements from a Dom in some way. When we look at the details of the implementation they all do it differently though. So moving a test suite from Webrat to Capybara or Steam might be easy if only the simplest and most common helpers are used. But it can also be a huge pita because of all the tiny differences in those libraries.
+In my opinion each of the libraries mentioned above do way to much. Amongst many other things they all implement tools for locating HTML elements from a Dom in some way. When we look at the details of the implementation they all do it differently though. So moving a test suite from Webrat to Capybara or Steam might be easy if only the simplest and most common helpers are used. But it can also be a huge pita because of all the tiny differences in those libraries: the APIs are simply not the same even if they seem to be at the first glimpse.
 
 Thus, having a library that does nothing but locating elements but does this one thing well and can then be used by other solutions that add other features is the way to go.
 
@@ -150,8 +180,5 @@ By now Locator has been integrated to Steam (which already very much streamlined
 
 TODO
 
-* clarify that "Matchable values" refers to when a text selector is being used
-* add notes about html class names being matched differently
-* add notes about nested tags in content
 * add notes about using Locator::Element classes directly
 
