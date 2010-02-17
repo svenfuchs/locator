@@ -55,7 +55,7 @@ module Locator
         def elements_by_xpath(*xpaths)
           xpaths.map do |xpath| 
             element.getByXPath(xpath).toArray.map { |e| Element.new(e) }
-          end.flatten.reverse # return innermost element first, as nokogiri does
+          end.flatten
         end
 
         def elements_by_css(*rules)
