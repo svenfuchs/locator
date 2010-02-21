@@ -5,11 +5,11 @@
 
 Gem::Specification.new do |s|
   s.name = %q{locator}
-  s.version = "0.0.3"
+  s.version = "0.0.4"
 
   s.required_rubygems_version = Gem::Requirement.new(">= 0") if s.respond_to? :required_rubygems_version=
   s.authors = ["Sven Fuchs"]
-  s.date = %q{2010-02-13}
+  s.date = %q{2010-02-21}
   s.description = %q{Generic html element locators for integration testing}
   s.email = %q{svenfuchs@artweb-design.de}
   s.extra_rdoc_files = [
@@ -20,10 +20,15 @@ Gem::Specification.new do |s|
     "README.textile",
      "Rakefile",
      "TODO",
+     "lib/core_ext/hash/except.rb",
+     "lib/core_ext/hash/slice.rb",
      "lib/core_ext/string/underscore.rb",
      "lib/locator.rb",
      "lib/locator/boolean.rb",
      "lib/locator/dom.rb",
+     "lib/locator/dom/htmlunit.rb",
+     "lib/locator/dom/htmlunit/element.rb",
+     "lib/locator/dom/htmlunit/page.rb",
      "lib/locator/dom/nokogiri.rb",
      "lib/locator/dom/nokogiri/element.rb",
      "lib/locator/dom/nokogiri/page.rb",
@@ -50,9 +55,12 @@ Gem::Specification.new do |s|
      "lib/locator/xpath.rb",
      "test/all.rb",
      "test/locator/boolean_test.rb",
+     "test/locator/dom/htmlunit_test.rb",
+     "test/locator/dom/nokogiri_test.rb",
      "test/locator/element/button_test.rb",
      "test/locator/element/field_test.rb",
      "test/locator/element/form_test.rb",
+     "test/locator/element/hidden_field_test.rb",
      "test/locator/element/label_test.rb",
      "test/locator/element/link_test.rb",
      "test/locator/element/select_option_test.rb",
@@ -71,9 +79,12 @@ Gem::Specification.new do |s|
   s.test_files = [
     "test/all.rb",
      "test/locator/boolean_test.rb",
+     "test/locator/dom/htmlunit_test.rb",
+     "test/locator/dom/nokogiri_test.rb",
      "test/locator/element/button_test.rb",
      "test/locator/element/field_test.rb",
      "test/locator/element/form_test.rb",
+     "test/locator/element/hidden_field_test.rb",
      "test/locator/element/label_test.rb",
      "test/locator/element/link_test.rb",
      "test/locator/element/select_option_test.rb",
