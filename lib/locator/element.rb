@@ -24,10 +24,8 @@ module Locator
     attr_reader :name, :css, :locatables, :attributes
 
     def initialize(*args)
-      attributes, name = args.last.is_a?(Hash) ? args.pop : {}, args.pop
-      @name = name
-      @attributes = attributes
-      @locatables = ((attributes.delete(:matches) || [:content]) + [:id]).uniq
+      @attributes, @name = args.last.is_a?(Hash) ? args.pop : {}, args.pop
+      @locatables = (attributes.delete(:matches) || [:content]) << :id
     end
 
     def locate(*args)
