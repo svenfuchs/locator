@@ -6,6 +6,7 @@ module Locator
     autoload :Area,           'locator/element/area'
     autoload :Button,         'locator/element/button'
     autoload :CheckBox,       'locator/element/check_box'
+    autoload :Content,        'locator/element/content'
     autoload :ElementsList,   'locator/element/elements_list'
     autoload :Field,          'locator/element/field'
     autoload :File,           'locator/element/file'
@@ -39,17 +40,23 @@ module Locator
       result
     end
 
-    def xpath(attributes = {})
-      @xpath ||= Xpath.new(name || '*', self.attributes.merge(attributes)).to_s
+    def xpath(*args)
+      options    = args.last.is_a?(Hash) ? args.pop : {}
+      attributes = self.attributes.merge(options.except(:xpath, :css)) # TODO move to Xpath?
+      xpath, css = options.values_at(:xpath, :css)
+
+      xpath ||= css ? ::Nokogiri::CSS.xpath_for(*css).first : args.pop
+      Xpath.new(xpath || name || '*', attributes).to_s
     end
 
     protected
 
       def lookup(scope, selector, attributes = {})
         scope = scope.respond_to?(:elements_by_xpath) ? scope : Locator::Dom.page(scope)
-        xpath, css = attributes.delete(:xpath), attributes.delete(:css)
-        xpath = ::Nokogiri::CSS.xpath_for(*css).first if css
-        elements = scope.elements_by_xpath(xpath || xpath(attributes))
+        xpath = xpath(attributes)
+        xpath = ".#{xpath}" unless xpath[0, 1] == '.'
+
+        elements = scope.elements_by_xpath(xpath)
         Result.new(elements).filter!(selector, locatables)
       end
   end
