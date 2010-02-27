@@ -9,29 +9,36 @@ class LocatorElementTest < Test::Unit::TestCase
     assert_equal './/*', Element.new.xpath
   end
 
-  test "xpath with a node name" do
+  test "xpath of an element with a node name" do
     xpath = Element.new(:div).xpath
     assert_equal './/div', xpath
   end
 
-  test "xpath with attributes" do
+  test "xpath of an element with attributes" do
     xpath = Element.new(nil, :type => 'type', :class => 'class').xpath
     assert_equal ".//*[@type=\"type\"][contains(concat(' ', @class, ' '), concat(' ', \"class\", ' '))]", xpath
   end
 
-  test "xpath with node name and attributes" do
+  test "xpath of an element with node name and attributes" do
     xpath = Element.new(:div, :type => 'type', :class => 'class').xpath
     assert_equal ".//div[@type=\"type\"][contains(concat(' ', @class, ' '), concat(' ', \"class\", ' '))]", xpath
   end
 
-  test "xpath with multiple node name and attributes" do
+  test "xpath of an element with multiple node name and attributes" do
     xpath = Element.new([:div, :p], :type => 'type').xpath
     assert_equal ".//div[@type=\"type\"] | .//p[@type=\"type\"]", xpath
   end
 
   test "xpath merges given attributes with element attributes" do
     xpath = Element.new(:div, :foo => 'foo').xpath(:bar => 'bar')
-    assert_equal ".//div[@foo=\"foo\"][@bar=\"bar\"]", xpath
+    assert xpath.include?(".//div")
+    assert xpath.include?("[@foo=\"foo\"]") # humpf, unsorted hash
+    assert xpath.include?("[@bar=\"bar\"]")
+  end
+
+  test "xpath with given xpath and attributes" do
+    xpath = Element.new.xpath('.//div', :foo => 'foo')
+    assert_equal ".//div[@foo=\"foo\"]", xpath
   end
 
   # all

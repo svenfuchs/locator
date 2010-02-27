@@ -4,6 +4,7 @@ module Locator
   autoload :Boolean, 'locator/boolean'
   autoload :Dom,     'locator/dom'
   autoload :Element, 'locator/element'
+  autoload :Matcher, 'locator/matcher'
   autoload :Result,  'locator/result'
   autoload :Xpath,   'locator/xpath'
 
@@ -31,17 +32,14 @@ module Locator
     Locator[type].new.xpath(*args)
   end
 
+  def all(dom, *args)
+    return args.first if args.first.respond_to?(:elements_by_xpath)
+    _lookup(:all, dom, *args)
+  end
+
   def locate(dom, *args, &block)
     return args.first if args.first.respond_to?(:elements_by_xpath)
-
-    options = Hash === args.last ? args.last : {}
-    result = if scope = options.delete(:within)
-      within(*Array(scope)) { locate(dom, *args) }
-    else
-      type = args.shift if args.first.is_a?(Symbol)
-      Locator.build(type).locate(current_scope(dom), *args)
-    end
-
+    result = _lookup(:locate, dom, *args)
     result && block_given? ? within(result) { yield(self) } : result
   end
 
@@ -51,6 +49,16 @@ module Locator
   end
 
   protected
+  
+    def _lookup(method, dom, *args)
+      options = Hash === args.last ? args.last : {}
+      result = if scope = options.delete(:within)
+        within(*Array(scope)) { send(method, dom, *args) }
+      else
+        type = args.shift if args.first.is_a?(Symbol)
+        Locator.build(type).send(method, current_scope(dom), *args)
+      end
+    end
 
     def current_scope(dom)
       dom = Locator::Dom.page(dom) unless dom.respond_to?(:elements_by_xpath)
