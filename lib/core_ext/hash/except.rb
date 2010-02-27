@@ -8,4 +8,4 @@ class Hash
   def except(*keys)
     dup.except!(*keys)
   end
-end unless Hash.method_defined?(:slice)
+end unless Hash.method_defined?(:except)
