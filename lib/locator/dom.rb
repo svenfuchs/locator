@@ -4,7 +4,7 @@ module Locator
   module Dom
     autoload :Htmlunit, 'locator/dom/htmlunit'
     autoload :Nokogiri, 'locator/dom/nokogiri'
-    
+
     class << self
       def adapter
         @@adapter ||= Nokogiri
@@ -18,5 +18,7 @@ module Locator
         adapter::Page.new(html)
       end
     end
+
+    class Element ; end
   end
 end

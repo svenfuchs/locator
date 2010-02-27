@@ -1,7 +1,7 @@
 module Locator
   module Dom
     module Htmlunit
-      class Element
+      class Element < Dom::Element
         attr_reader :element, :matches
 
         def initialize(element)

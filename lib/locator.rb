@@ -62,6 +62,8 @@ module Locator
         dom.elements_by_xpath(scope.first).first
       when String
         dom.elements_by_css(scope.first).first
+      when Dom::Element
+        Locator::Dom.page(scope.first.to_s) # FIXME should use scope.first instead
       else
         locate(dom, *scope)
       end
