@@ -71,7 +71,7 @@ module Locator
       when String
         dom.elements_by_css(scope.first).first
       when Dom::Element
-        Locator::Dom.page(scope.first.to_s) # FIXME should use scope.first instead
+        scope.first.to_s
       else
         locate(dom, *scope)
       end
