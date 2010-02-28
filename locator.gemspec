@@ -5,11 +5,11 @@
 
 Gem::Specification.new do |s|
   s.name = %q{locator}
-  s.version = "0.0.4"
+  s.version = "0.0.5"
 
   s.required_rubygems_version = Gem::Requirement.new(">= 0") if s.respond_to? :required_rubygems_version=
   s.authors = ["Sven Fuchs"]
-  s.date = %q{2010-02-21}
+  s.date = %q{2010-02-28}
   s.description = %q{Generic html element locators for integration testing}
   s.email = %q{svenfuchs@artweb-design.de}
   s.extra_rdoc_files = [
@@ -36,6 +36,7 @@ Gem::Specification.new do |s|
      "lib/locator/element/area.rb",
      "lib/locator/element/button.rb",
      "lib/locator/element/check_box.rb",
+     "lib/locator/element/content.rb",
      "lib/locator/element/elements_list.rb",
      "lib/locator/element/field.rb",
      "lib/locator/element/file.rb",
@@ -50,6 +51,8 @@ Gem::Specification.new do |s|
      "lib/locator/element/select.rb",
      "lib/locator/element/select_option.rb",
      "lib/locator/element/text_area.rb",
+     "lib/locator/matcher.rb",
+     "lib/locator/matcher/have_tag.rb",
      "lib/locator/result.rb",
      "lib/locator/version.rb",
      "lib/locator/xpath.rb",
@@ -67,6 +70,8 @@ Gem::Specification.new do |s|
      "test/locator/element/select_test.rb",
      "test/locator/element/text_area_test.rb",
      "test/locator/element_test.rb",
+     "test/locator/matcher/have_content_test.rb",
+     "test/locator/matcher/have_tag_test.rb",
      "test/locator/xpath_test.rb",
      "test/locator_test.rb",
      "test/test_helper.rb"
@@ -91,6 +96,8 @@ Gem::Specification.new do |s|
      "test/locator/element/select_test.rb",
      "test/locator/element/text_area_test.rb",
      "test/locator/element_test.rb",
+     "test/locator/matcher/have_content_test.rb",
+     "test/locator/matcher/have_tag_test.rb",
      "test/locator/xpath_test.rb",
      "test/locator_test.rb",
      "test/test_helper.rb"
