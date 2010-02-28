@@ -36,25 +36,25 @@ class LocatorTest < Test::Unit::TestCase
 
   test "within scopes to a locator" do
     html = '<form></form><div id="bar"><form id="foo"></form></div>'
-    element = Locator.within(:div, :id => 'bar') { |scope| scope.locate(html, :form) }
+    element = Locator.within(:div, :id => 'bar') { Locator.locate(html, :form) }
     assert_equal 'foo', element.attribute('id')
   end
 
   test "within scopes to a css selector" do
     html = '<form></form><div id="bar"><form id="foo"></form></div>'
-    element = Locator.within('#bar') { |scope| scope.locate(html, :form) }
+    element = Locator.within('#bar') { Locator.locate(html, :form) }
     assert_equal 'foo', element.attribute('id')
   end
 
   test "within scopes to an xpath" do
     html = '<form></form><div id="bar"><form id="foo"></form></div>'
-    element = Locator.within('//div[@id="bar"]') { |scope| scope.locate(html, :form) }
+    element = Locator.within('//div[@id="bar"]') { Locator.locate(html, :form) }
     assert_equal 'foo', element.attribute('id')
   end
 
   test "nested within blocks" do
     html = '<form></form><div><form><p id="foo"><p></form></div>'
-    element = Locator.within(:div) { |scope| scope.within(:form) { |scope| scope.locate(html, :p) } }
+    element = Locator.within(:div) { Locator.within(:form) { Locator.locate(html, :p) } }
     assert_equal 'foo', element.attribute('id')
   end
 

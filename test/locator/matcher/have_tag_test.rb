@@ -126,15 +126,15 @@ class LocatorMatcherHaveTagTest < Test::Unit::TestCase
   end
 
   test 'can use have_path in the given block' do
-    assert have_tag(:xpath => '//p') { assert have_tag(:xpath => '//a').matches?(@html); true }.matches?(@html)
+    assert have_tag(:xpath => '//p') { assert have_tag(:xpath => '//a').matches?(nil); true }.matches?(@html)
   end
 
   test 'uses a relative path when called in a block' do
-    assert have_tag(:xpath => '//p') { assert have_tag(:xpath => '//a').matches?(@html); true }.matches?(@html)
+    assert have_tag(:xpath => '//p') { assert have_tag(:xpath => '//a').matches?(nil); true }.matches?(@html)
   end
 
   test 'does not match parent tags called in a block' do
-    assert have_tag(:xpath => '//a') { |element| assert !have_tag(:xpath => '//p').matches?(element); true }.matches?(@html)
+    assert have_tag(:xpath => '//a') { assert !have_tag(:xpath => '//p').matches?(nil); true }.matches?(@html)
   end
 
   # counting matches

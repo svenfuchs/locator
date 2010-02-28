@@ -8,13 +8,13 @@ module Locator
     end
 
     # Asserts that the response body contains the given string or regexp
-    def assert_contain(*args)
+    def assert_contain(html, *args)
       matcher = contain(*args)
-      assert matcher.matches?(response.body), matcher.failure_message
+      assert matcher.matches?(html), matcher.failure_message
     end
 
     # Asserts that the response body does not contain the given string or regexp
-    def assert_not_contain(*args)
+    def assert_not_contain(html, *args)
       matcher = contain(*args)
       assert !matcher.matches?(response.body), matcher.negative_failure_message
     end
@@ -23,12 +23,12 @@ module Locator
       HaveTag.new(*args, &block)
     end
 
-    def assert_have_tag(*args, &block)
+    def assert_have_tag(html, *args, &block)
       matcher = have_tag(*args, &block)
       assert matcher.matches?(response.body), matcher.failure_message
     end
 
-    def assert_have_no_tag(*args, &block)
+    def assert_have_no_tag(html, *args, &block)
       matcher = have_tag(*args, &block)
       assert !matcher.matches?(response.body), matcher.negative_failure_message
     end
@@ -39,14 +39,14 @@ module Locator
     end
 
     # Asserts that the response body matches the given XPath
-    def assert_have_xpath(xpath, options = {}, &block)
-      matcher = have_xpath(xpath, options = {}, &block)
+    def assert_have_xpath(html, *args, &block)
+      matcher = have_xpath(*args, &block)
       assert matcher.matches?(response.body), matcher.failure_message
     end
 
     # Asserts that the response body does not match the given XPath
-    def assert_have_no_xpath(xpath, options = {}, &block)
-      matcher = have_xpath(xpath, options = {}, &block)
+    def assert_have_no_xpath(html, *args, &block)
+      matcher = have_xpath(*args, &block)
       assert !matcher.matches?(response.body), matcher.negative_failure_message
     end
 
@@ -56,14 +56,14 @@ module Locator
     end
 
     # Asserts that the response body matches the given CSS selector
-    def assert_have_css(css, options = {}, &block)
-      matcher = have_css(css, options = {}, &block)
+    def assert_have_css(html, *args, &block)
+      matcher = have_css(*args, &block)
       assert matcher.matches?(response.body), matcher.failure_message
     end
 
     # Asserts that the response body does not match the given CSS selector
-    def assert_have_no_css(css, options = {}, &block)
-      matcher = have_css(css, options = {}, &block)
+    def assert_have_no_css(html, *args, &block)
+      matcher = have_css(*args, &block)
       assert !matcher.matches?(response.body), matcher.negative_failure_message
     end
   end

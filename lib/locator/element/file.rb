@@ -2,7 +2,7 @@ module Locator
   class Element
     class File < Input
       def initialize
-        super(:input, :type => :file)
+        super(:type => :file)
       end
     end
   end

@@ -10,7 +10,7 @@ module Locator
         @block    = block
       end
 
-      def matches?(target)
+      def matches?(target = nil)
         @target = target
         count ? match_count : !!match_element
       end

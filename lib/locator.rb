@@ -8,6 +8,12 @@ module Locator
   autoload :Result,  'locator/result'
   autoload :Xpath,   'locator/xpath'
 
+  class ElementNotFound < StandardError
+    def initialize(*args)
+      super "could not find element type: #{args.map { |arg| arg.inspect }.join(', ') }"
+    end
+  end
+
   class << self
     def [](type)
       locators[type.to_sym] || raise("unknown locator type: #{type}")
@@ -40,12 +46,12 @@ module Locator
   def locate(dom, *args, &block)
     return args.first if args.first.respond_to?(:elements_by_xpath)
     result = _lookup(:locate, dom, *args)
-    result && block_given? ? within(result) { yield(self) } : result
+    result && block_given? ? within(result) { yield(result) } : result
   end
 
   def within(*scope)
     scopes.push(scope)
-    yield(self)
+    yield
   end
 
   protected
@@ -55,8 +61,9 @@ module Locator
       result = if scope = options.delete(:within)
         within(*Array(scope)) { send(method, dom, *args) }
       else
-        type = args.shift if args.first.is_a?(Symbol)
-        Locator.build(type).send(method, current_scope(dom), *args)
+        type  = args.shift if args.first.is_a?(Symbol)
+        scope = current_scope(dom)
+        Locator.build(type).send(method, scope, *args)
       end
     end
 
@@ -67,9 +74,9 @@ module Locator
       when NilClass
         dom
       when %r(^\.?//)
-        dom.elements_by_xpath(scope.first).first
+        dom.element_by_xpath(scope.first)
       when String
-        dom.elements_by_css(scope.first).first
+        dom.element_by_css(scope.first)
       when Dom::Element
         scope.first.to_s
       else

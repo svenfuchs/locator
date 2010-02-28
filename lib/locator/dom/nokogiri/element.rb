@@ -29,6 +29,22 @@ module Locator
           element.content
         end
 
+        def value
+          case name
+          when 'input'
+            element.attribute('value').value
+          when 'select'
+            selected = element.children.select { |option| option.attribute('selected') }
+            values = selected.map { |option| option.attribute('value') || option.content }
+            element.attribute('multiple') ? values.strip : values.first.strip
+          end
+        end
+
+        def checked
+          checked = element.attribute('checked')
+          checked ? checked.value : nil
+        end
+
         def inner_html
           element.inner_html
         end
@@ -48,9 +64,15 @@ module Locator
         def element_by_xpath(xpath)
           elements_by_xpath(xpath).first
         end
-        
+
         def elements_by_xpath(*xpaths)
-          element.xpath(*xpaths).map { |element| Element.new(element) }
+          element.xpath(*xpaths).map do |element|
+            element ? Element.new(element) : raise(ElementNotFound, xpaths)
+          end
+        end
+
+        def element_by_css(rule)
+          elements_by_css(rule).first
         end
 
         def elements_by_css(*rules)
