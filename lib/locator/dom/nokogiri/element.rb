@@ -66,9 +66,7 @@ module Locator
         end
 
         def elements_by_xpath(*xpaths)
-          element.xpath(*xpaths).map do |element|
-            element ? Element.new(element) : raise(ElementNotFound, xpaths)
-          end
+          element.xpath(*xpaths).map { |element| Element.new(element) }
         end
 
         def element_by_css(rule)

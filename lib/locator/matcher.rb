@@ -8,13 +8,13 @@ module Locator
     end
 
     # Asserts that the response body contains the given string or regexp
-    def assert_contain(html, *args)
+    def assert_contain(*args)
       matcher = contain(*args)
-      assert matcher.matches?(html), matcher.failure_message
+      assert matcher.matches?(response.body), matcher.failure_message
     end
 
     # Asserts that the response body does not contain the given string or regexp
-    def assert_not_contain(html, *args)
+    def assert_not_contain(*args)
       matcher = contain(*args)
       assert !matcher.matches?(response.body), matcher.negative_failure_message
     end

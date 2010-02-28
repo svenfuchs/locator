@@ -33,44 +33,48 @@ module Locator
       end
   end
 
+  def scopes
+    @scopes ||= []
+  end
+
   def xpath(*args)
     type = args.shift if args.first.is_a?(Symbol)
     Locator[type].new.xpath(*args)
   end
 
   def all(dom, *args)
-    return args.first if args.first.respond_to?(:elements_by_xpath)
-    _lookup(:all, dom, *args)
+    lookup(:all, dom, *args)
   end
 
   def locate(dom, *args, &block)
-    return args.first if args.first.respond_to?(:elements_by_xpath)
-    result = _lookup(:locate, dom, *args)
-    result && block_given? ? within(result) { yield(result) } : result
+    lookup(:locate, dom, *args, &block)
   end
 
-  def within(*scope)
-    scopes.push(scope)
-    yield
+  def within(*args)
+    dom = dom?(args.first) ? args.shift : scopes.pop
+    scopes << resolve_scope(dom, args)
+    yield(scopes.last)
   end
 
   protected
-  
-    def _lookup(method, dom, *args)
+
+    def lookup(method, *args, &block)
       options = Hash === args.last ? args.last : {}
-      result = if scope = options.delete(:within)
-        within(*Array(scope)) { send(method, dom, *args) }
-      else
-        type  = args.shift if args.first.is_a?(Symbol)
-        scope = current_scope(dom)
-        Locator.build(type).send(method, scope, *args)
-      end
+      dom     = args.shift if dom?(args.first)
+      type    = args.shift if args.first.is_a?(Symbol)
+
+      scope  = resolve_scope(dom, options.delete(:within)) if options[:within]
+      scope  = scope || scopes.pop || dom
+
+      result = Locator.build(type).send(method, scope, *args)
+      result = result && block_given? ? within(result) { yield(result) } : result
     end
 
-    def current_scope(dom)
-      dom = Locator::Dom.page(dom) unless dom.respond_to?(:elements_by_xpath)
+    def resolve_scope(dom, scope)
+      dom   = Locator::Dom.page(dom) unless dom.respond_to?(:elements_by_xpath)
+      scope = Array(scope)
 
-      case (scope = scopes.pop) && scope.first
+      case scope.first
       when NilClass
         dom
       when %r(^\.?//)
@@ -84,8 +88,12 @@ module Locator
       end
     end
 
-    def scopes
-      @scopes ||= []
+    def dom?(arg)
+      arg.is_a?(Dom::Element) || html?(arg)
+    end
+
+    def html?(arg)
+      arg.is_a?(String) && arg =~ /<[^>]+>/
     end
 
   extend(self)

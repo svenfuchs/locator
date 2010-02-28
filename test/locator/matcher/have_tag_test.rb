@@ -117,13 +117,13 @@ class LocatorMatcherHaveTagTest < Test::Unit::TestCase
 
   # using a block
 
-  test 'given block selects from matched elements (block yields true)' do
-    assert have_tag(:xpath => '//p') { true }.matches?(@html)
-  end
-
-  test 'given block selects from matched elements (block yields false)' do
-    assert !have_tag(:xpath => '//p') { false }.matches?(@html)
-  end
+  # test 'given block selects from matched elements (block yields true)' do
+  #   assert have_tag(:xpath => '//p') { true }.matches?(@html)
+  # end
+  #
+  # test 'given block selects from matched elements (block yields false)' do
+  #   assert !have_tag(:xpath => '//p') { false }.matches?(@html)
+  # end
 
   test 'can use have_path in the given block' do
     assert have_tag(:xpath => '//p') { assert have_tag(:xpath => '//a').matches?(nil); true }.matches?(@html)

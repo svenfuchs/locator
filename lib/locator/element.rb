@@ -30,7 +30,7 @@ module Locator
     end
 
     def locate(*args)
-      all(*args).first
+      all(*args).first # || raise(ElementNotFound.new(*args))
     end
 
     def all(scope, *args)
