@@ -1,10 +1,21 @@
+require 'rubygems'
+require 'rake'
 require 'rake/testtask'
+require 'rake/rdoctask'
 
-require File.expand_path("../lib/locator/version", __FILE__)
+desc 'Default: run unit tests.'
+task :default => :test
+
+desc 'Run all tests.'
+Rake::TestTask.new(:test) do |t|
+  load 'test/all.rb'
+end
 
 begin
   require 'jeweler'
   Jeweler::Tasks.new do |s|
+    require File.expand_path("../lib/locator/version", __FILE__)
+
     s.name = "locator"
     s.version = Locator::VERSION
     s.summary = "Generic html element locators for integration testing"

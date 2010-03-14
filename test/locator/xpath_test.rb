@@ -19,8 +19,8 @@ class XpathTest < Test::Unit::TestCase
   end
 
   test "xpath with attributes" do
-    path = Xpath.new(['input', 'button'], :type => 'text', :id => 'foo').to_s
-    assert_equal %(.//input[@type="text"][@id="foo"] | .//button[@type="text"][@id="foo"]), path
+    path = Xpath.new(['input', 'button'], :type => 'text', :id => 'foo')
+    assert_equal %(.//input[@type="text"][@id="foo"] | .//button[@type="text"][@id="foo"]), path.to_s
   end
 
   test "xpath with alternate nodenames and attributes" do

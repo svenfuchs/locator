@@ -7,7 +7,7 @@ module Locator
         string =~ %r(^\.?//)
       end
     end
-    
+
     def initialize(name = nil, attributes = {})
       super(Array(name || '*').map { |name| self.class.xpath?(name) ? name : ".//#{name}" })
 
@@ -43,7 +43,7 @@ module Locator
     end
 
     def and!(other)
-      replace(self.map { |l| other.map { |r| "#{l}#{r}" } })
+      replace(self.map { |l| Array(other).map { |r| "#{l}#{r}" } }.flatten)
     end
 
     def or!(other)

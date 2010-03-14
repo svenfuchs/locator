@@ -34,7 +34,7 @@ module Locator
       self.operator = ' AND '
 
       def initialize(lft, rgt)
-        replace(lft.map { |l| rgt.map { |r| "#{l}#{self.class.operator}#{r}" } })
+        replace(Array(lft).map { |l| Array(rgt).map { |r| "#{l}#{self.class.operator}#{r}" } })
       end
     end
 

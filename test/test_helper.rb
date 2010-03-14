@@ -1,5 +1,4 @@
 $:.unshift File.expand_path("../lib", File.dirname(__FILE__))
-$:.unshift(File.expand_path(File.dirname(__FILE__)))
 
 require 'test/unit'
 require 'locator'
@@ -7,7 +6,7 @@ require 'locator'
 module TestMethod
   def self.included(base)
     base.class_eval do
-      def test(name, &block)
+      def self.test(name, &block)
         test_name = "test_#{name.gsub(/\s+/,'_')}".to_sym
         defined = instance_method(test_name) rescue false
         raise "#{test_name} is already defined in #{self}" if defined
