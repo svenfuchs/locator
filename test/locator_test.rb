@@ -1,3 +1,4 @@
+# encoding: utf-8
 require File.expand_path('../test_helper', __FILE__)
 
 class LocatorTest < Test::Unit::TestCase
@@ -30,6 +31,16 @@ class LocatorTest < Test::Unit::TestCase
     html = '<html><body><form id="foo"></form><form id="bar"></form></body></html>'
     element = locate(html, :xpath => '//form')
     assert_equal 'foo', element.attribute('id')
+  end
+
+  test "locates an element by node name and selector (containing an umlaut)" do
+    html = '<span>Berlin</span><span>München</span>'
+    assert_equal 'München', locate(html, 'München').content
+  end
+
+  test "locates an element by node name and attribute (containing an umlaut)" do
+    html = '<input type="text" value="München">'
+    assert_equal html, locate(html, :value => 'München').to_s
   end
 
   # within

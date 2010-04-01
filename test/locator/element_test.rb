@@ -1,3 +1,4 @@
+# encoding: utf-8
 require File.expand_path('../../test_helper', __FILE__)
 
 class LocatorElementTest < Test::Unit::TestCase
@@ -121,5 +122,15 @@ class LocatorElementTest < Test::Unit::TestCase
   test "locate using a css selector" do
     html = '<a class="foo" href="#"></a><a class="bar" href="#"></a>'
     assert_equal 'bar', Element::Link.new.locate(html, :css => '.bar').attribute('class')
+  end
+
+  test "locate selects an element containing an umlaut" do
+    html = '<a href="#">the lünk</a>'
+    assert Element.new.locate(html, 'the lünk')
+  end
+
+  test "locate selects an element with an attribute containing an umlaut" do
+    html = '<input type="text" value="München" />'
+    assert Element.new.locate(html, :value => 'München')
   end
 end
