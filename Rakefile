@@ -24,6 +24,7 @@ begin
     s.description = "Generic html element locators for integration testing"
     s.authors = ['Sven Fuchs']
     s.files =  FileList["[A-Z]*", "{lib,test,vendor}/**/*"]
+    s.add_dependency 'htmlentities'
   end
 rescue LoadError
   puts "Jeweler, or one of its dependencies, is not available. Install it with: sudo gem install technicalpickles-jeweler -s http://gems.github.com"

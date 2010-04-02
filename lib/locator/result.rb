@@ -8,6 +8,7 @@ module Locator
 
     class << self
       def matches?(name, value, selector)
+        value, selector = Locator.decode(value), Locator.decode(selector) if Locator.decode_entities?
         value = normalize_whitespace(value)
         case selector
         when Regexp

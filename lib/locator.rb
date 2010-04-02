@@ -1,12 +1,15 @@
 require 'core_ext/string/underscore'
 
 module Locator
-  autoload :Boolean, 'locator/boolean'
-  autoload :Dom,     'locator/dom'
-  autoload :Element, 'locator/element'
-  autoload :Matcher, 'locator/matcher'
-  autoload :Result,  'locator/result'
-  autoload :Xpath,   'locator/xpath'
+  autoload :Boolean,  'locator/boolean'
+  autoload :Dom,      'locator/dom'
+  autoload :Decoding, 'locator/decoding'
+  autoload :Element,  'locator/element'
+  autoload :Matcher,  'locator/matcher'
+  autoload :Result,   'locator/result'
+  autoload :Xpath,    'locator/xpath'
+
+  extend Decoding
 
   class ElementNotFound < StandardError
     def initialize(*args)

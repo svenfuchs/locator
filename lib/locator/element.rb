@@ -52,6 +52,8 @@ module Locator
     protected
 
       def lookup(scope, selector, attributes = {})
+        attributes = Locator.decode_attributes(attributes) if Locator.decode_entities?
+
         scope = scope.respond_to?(:elements_by_xpath) ? scope : Locator::Dom.page(scope)
         xpath = xpath(attributes)
         xpath = ".#{xpath}" unless xpath[0, 1] == '.'

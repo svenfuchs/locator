@@ -33,16 +33,6 @@ class LocatorTest < Test::Unit::TestCase
     assert_equal 'foo', element.attribute('id')
   end
 
-  test "locates an element by node name and selector (containing an umlaut)" do
-    html = '<span>Berlin</span><span>München</span>'
-    assert_equal 'München', locate(html, 'München').content
-  end
-
-  test "locates an element by node name and attribute (containing an umlaut)" do
-    html = '<input type="text" value="München">'
-    assert_equal html, locate(html, :value => 'München').to_s
-  end
-
   # within
 
   test "within scopes to a locator" do
@@ -96,5 +86,47 @@ class LocatorTest < Test::Unit::TestCase
   test "locate does not yield the block when no element was found (would otherwise locate in global scope)" do
     html = '<form></form><div><form><p id="foo"><p></form></div>'
     assert_nil locate(html, :div) { locate(html, :form, :class => 'bar')  { locate(html, :p) } }
+  end
+
+  # locate with umlauts
+
+  test "locates an element by encoded selector from html containing an encoded umlaut" do
+    html = '<span>Berlin</span><span>M&uuml;nchen</span>'
+    assert_equal 'München', locate(html, 'M&uuml;nchen').content
+  end
+
+  test "locates an element by encoded selector from html containing an non-encoded umlaut" do
+    html = '<span>Berlin</span><span>München</span>'
+    assert_equal 'München', locate(html, 'M&uuml;nchen').content
+  end
+
+  test "locates an element by non-encoded selector from html containing an encoded umlaut" do
+    html = '<span>Berlin</span><span>M&uuml;nchen</span>'
+    assert_equal 'München', locate(html, 'München').content
+  end
+
+  test "locates an element by non-encoded selector from html containing a non-encoded umlaut" do
+    html = '<span>Berlin</span><span>München</span>'
+    assert_equal 'München', locate(html, 'München').content
+  end
+
+  test "locates an element by encoded attribute from html containing an encoded umlaut" do
+    html = '<input type="text" value="M&uuml;nchen">'
+    assert_equal 'München', locate(html, :value => 'M&uuml;nchen').value
+  end
+
+  test "locates an element by encoded attribute from html containing an non-encoded umlaut" do
+    html = '<input type="text" value="München">'
+    assert_equal 'München', locate(html, :value => 'M&uuml;nchen').value
+  end
+
+  test "locates an element by non-encoded attribute from html containing an encoded umlaut" do
+    html = '<input type="text" value="M&uuml;nchen">'
+    assert_equal 'München', locate(html, :value => 'München').value
+  end
+
+  test "locates an element by non-encoded attribute from html containing a non-encoded umlaut" do
+    html = '<input type="text" value="München">'
+    assert_equal 'München', locate(html, :value => 'München').value
   end
 end

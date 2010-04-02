@@ -25,10 +25,6 @@ module Locator
           element.css_path.to_s
         end
 
-        def content
-          element.content
-        end
-
         def value
           case name
           when 'input'
@@ -43,6 +39,10 @@ module Locator
         def checked
           checked = element.attribute('checked')
           checked ? checked.value : nil
+        end
+
+        def content
+          element.content
         end
 
         def inner_html
