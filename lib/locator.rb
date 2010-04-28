@@ -31,7 +31,7 @@ module Locator
 
       def locators
         @locators ||= Hash[*Element.constants.map do |name|
-          [name.to_s.underscore.to_sym, Element.const_get(name)]
+          [name.to_s.dup.underscore.to_sym, Element.const_get(name)]
         end.flatten]
       end
   end
