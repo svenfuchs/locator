@@ -45,6 +45,7 @@ module Locator
       matcher = have_tag(*args, &block)
       assert !matcher.matches?(response.body), matcher.negative_failure_message
     end
+    alias :assert_does_not_have_tag :assert_no_tag
 
     # Asserts that the response body matches the given XPath
     def assert_has_xpath(html, *args, &block)
@@ -57,6 +58,7 @@ module Locator
       matcher = have_xpath(*args, &block)
       assert !matcher.matches?(response.body), matcher.negative_failure_message
     end
+    alias :assert_does_not_have_xpath :assert_no_tag
 
     # Asserts that the response body matches the given CSS selector
     def assert_has_css(html, *args, &block)
@@ -69,6 +71,7 @@ module Locator
       matcher = have_css(*args, &block)
       assert !matcher.matches?(response.body), matcher.negative_failure_message
     end
+    alias :assert_does_not_have_css :assert_no_tag
 
     def assert_css_class(css_classes, css_class)
       matcher = HaveCssClass.new(css_class)
@@ -79,6 +82,6 @@ module Locator
       matcher = HaveCssClass.new(css_class)
       assert matcher.matches?(css_classes.body), matcher.negative_failure_message
     end
-
+    alias :assert_does_not_include_css_class :assert_no_tag
   end
 end
