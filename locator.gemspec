@@ -13,6 +13,7 @@ Gem::Specification.new do |s|
   s.files        = Dir['{lib/**/*,[A-Z]*}']
 
   s.add_runtime_dependency 'htmlentities', '>= 4.2.0'
+  s.add_runtime_dependency 'nokogiri',     '>= 1.4.1'
 
   s.platform     = Gem::Platform::RUBY
   s.require_path = 'lib'

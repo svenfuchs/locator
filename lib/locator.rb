@@ -1,13 +1,14 @@
 require 'core_ext/string/underscore'
 
 module Locator
-  autoload :Boolean,  'locator/boolean'
-  autoload :Dom,      'locator/dom'
-  autoload :Decoding, 'locator/decoding'
-  autoload :Element,  'locator/element'
-  autoload :Matcher,  'locator/matcher'
-  autoload :Result,   'locator/result'
-  autoload :Xpath,    'locator/xpath'
+  autoload :Assertions, 'locator/assertions'
+  autoload :Boolean,    'locator/boolean'
+  autoload :Dom,        'locator/dom'
+  autoload :Decoding,   'locator/decoding'
+  autoload :Element,    'locator/element'
+  autoload :Matcher,    'locator/matcher'
+  autoload :Result,     'locator/result'
+  autoload :Xpath,      'locator/xpath'
 
   extend Decoding
 
